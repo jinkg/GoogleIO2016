@@ -9,4 +9,6 @@
     <string name="welcome_select_account">Select an account</string>
     <string name="welcome_select_account_text">Please choose an account to use:</string>
     <string name="skip">Skip</string>
+
+    <string name="navdrawer_item_sign_in">Sign in</string>
 </resources>
