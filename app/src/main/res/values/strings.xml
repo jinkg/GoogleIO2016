@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">GoogleIO2016</string>
+    <string name="decline">Decline</string>
+    <string name="accept">Accept</string>
+
+    <string name="welcome_to_google_i_o_app">Welcome to the Google I/O app!</string>
+
+    <string name="welcome_text">Before we begin, here is some important legal information regarding your use of this app. This will only take a minute!</string>
+    <string name="welcome_select_account">Select an account</string>
+    <string name="welcome_select_account_text">Please choose an account to use:</string>
+    <string name="skip">Skip</string>
+</resources>

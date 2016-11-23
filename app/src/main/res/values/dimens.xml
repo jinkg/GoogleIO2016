@@ -1,0 +1,28 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="spacing_normal">8dp</dimen>
+    <dimen name="padding_normal">16dp</dimen>
+
+    <dimen name="card_corner_radius">2dp</dimen>
+    <dimen name="card_elevation">2dp</dimen>
+
+    <dimen name="keyline_1">16dp</dimen>
+    <dimen name="keyline_1_minus_8dp">8dp</dimen>
+    <dimen name="keyline_2">72dp</dimen>
+    <dimen name="keyline_2_minus_16dp">56dp</dimen>
+    <dimen name="keyline_2_session_detail">@dimen/keyline_2</dimen>
+
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+
+    <item name="match_parent" format="integer" type="dimen">-1</item>
+
+    <dimen name="welcome_logo_spacing">48dp</dimen>
+    <dimen name="welcome_logo_height">112dp</dimen>
+    <dimen name="welcome_content_padding_top">186dp</dimen>
+    <dimen name="welcome_content_width">@dimen/match_parent</dimen>
+    <dimen name="welcome_content_padding">@dimen/padding_normal</dimen>
+    <dimen name="welcome_button_bar_elevation">6dp</dimen>
+    <dimen name="welcome_title_size">20sp</dimen>
+    <dimen name="welcome_logo_top_spacing">48dp</dimen>
+</resources>

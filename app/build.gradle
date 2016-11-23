@@ -1,0 +1,48 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 24
+    buildToolsVersion "24.0.2"
+    defaultConfig {
+        applicationId "com.yalin.googleio2016"
+        minSdkVersion 16
+        targetSdkVersion 24
+        versionCode Integer.valueOf("" + appVersionCode).intValue()
+        versionName "${appVersionName}"
+
+        vectorDrawables.useSupportLibrary = true
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        buildConfigField("boolean", "ENABLE_EXTERNAL_LOG", "true")
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+
+    // Google Play services split client libs.
+    compile "com.google.android.gms:play-services-auth:${google_play_services_client_library_version}"
+
+    compile "com.android.support:appcompat-v7:${android_support_lib_version}"
+    compile "com.android.support:cardview-v7:${android_support_lib_version}"
+    compile "com.android.support:design:${android_support_lib_version}"
+    compile "com.android.support:recyclerview-v7:${android_support_lib_version}"
+    compile "com.android.support:preference-v7:${android_support_lib_version}"
+
+    androidTestCompile 'com.android.support.test:runner:0.5'
+    androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.2'
+    androidTestCompile 'com.android.support.test.espresso:espresso-intents:2.2.2'
+    androidTestCompile 'com.android.support.test.espresso:espresso-contrib:2.2.2'
+
+    androidTestCompile "com.android.support:support-annotations:${android_support_lib_version}"
+    androidTestCompile "com.android.support:recyclerview-v7:${android_support_lib_version}"
+    androidTestCompile "com.android.support:design:${android_support_lib_version}"
+
+    testCompile 'junit:junit:4.12'
+}

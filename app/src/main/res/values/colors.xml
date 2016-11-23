@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="transparent">#00000000</color>
+    <color name="background">#fff7f9f9</color>
+
+    <color name="io16_primary_cyan">#ff25c5d9</color>
+    <color name="io16_primary_purple">#ff5d6abf</color>
+    <color name="io16_primary_blue_grey">#ff445963</color>
+    <color name="io16_accent_red">#ffff5151</color>
+    <color name="io16_accent_cyan">#ff4ccfe0</color>
+    <color name="io16_accent_light_cyan">#ff8cedea</color>
+    <color name="io16_accent_green">#ff7bb241</color>
+    <color name="io16_accent_yellow">#ffffc927</color>
+    <color name="io16_accent_purple">#ff7885ca</color>
+    <color name="dark_icon">#99000000</color>
+
+    <color name="app_primary_accent">#FF26C6DA</color>
+    <color name="app_secondary_accent">#1A000000</color>
+    <color name="app_primary_text">#444444</color>
+    <color name="app_secondary_text">#444444</color>
+    <color name="app_white">#FFFEFEFE</color>
+    <color name="app_io_logo_tint">#FF26C6DA</color>
+    <color name="divider">#1f000000</color>
+
+    <color name="theme_primary">@color/app_primary_accent</color>
+    <color name="theme_primary_dark">#00BCD4</color>
+    <color name="theme_primary_light">#7986cb</color>
+
+    <color name="app_body_text_1">#de000000</color>
+    <color name="app_body_text_2">#8a000000</color>
+    <color name="app_body_text_disabled">#44000000</color>
+    <color name="flat_button_text">#ff0097a7</color>
+    <color name="preferred_action">#b3000000</color>
+
+    <color name="body_text_1">#de000000</color>
+    <color name="body_text_2">#8a000000</color>
+    <color name="body_text_3">#60000000</color>
+    <color name="body_text_disabled">#44000000</color>
+</resources>
