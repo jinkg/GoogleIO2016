@@ -45,7 +45,7 @@ public class LoginAndAuthWithGoogleApi implements LoginAndAuth {
 
     @Override
     public String getAccountName() {
-        return null;
+        return mAccountName;
     }
 
     @Override

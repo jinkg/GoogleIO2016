@@ -55,6 +55,15 @@
 
     <style name="Theme.GoogleIO.Light" parent="Theme.GoogleIO.WithNavDrawer" />
 
+    <style name="Theme.GoogleIO.Transparent" parent="Theme.GoogleIO.Light">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:backgroundDimEnabled">false</item>
+    </style>
+
     <style name="Widget.GoogleIO.EditText" parent="Widget.AppCompat.EditText">
         <item name="background">@drawable/edit_text</item>
     </style>

@@ -38,8 +38,12 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".explore.ExploreIOActivity" />
-
         </activity>
+
+        <activity
+            android:name=".login.SwitchUserActivity"
+            android:exported="false"
+            android:theme="@style/Theme.GoogleIO.Transparent" />
 
         <service android:name=".sync.account.AuthenticatorService">
             <intent-filter>

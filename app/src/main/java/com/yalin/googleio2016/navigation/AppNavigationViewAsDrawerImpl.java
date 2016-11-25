@@ -1,7 +1,6 @@
 package com.yalin.googleio2016.navigation;
 
 import android.accounts.Account;
-import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.os.Handler;
@@ -17,17 +16,16 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Spinner;
 
+import com.google.android.gms.auth.GoogleAuthUtil;
 import com.yalin.googleio2016.R;
-import com.yalin.googleio2016.login.SwitchUserActivity;
 import com.yalin.googleio2016.navigation.NavigationModel.NavigationItemEnum;
 import com.yalin.googleio2016.settings.SettingsUtils;
-import com.yalin.googleio2016.ui.BaseActivity;
 import com.yalin.googleio2016.util.AccountUtils;
 import com.yalin.googleio2016.util.ImageLoader;
 import com.yalin.googleio2016.util.LogUtil;
 import com.yalin.googleio2016.util.UIUtils;
 
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -225,8 +223,11 @@ public class AppNavigationViewAsDrawerImpl extends AppNavigationViewAbstractImpl
             coverImageView.setVisibility(View.GONE);
         }
 
-        List<Account> accounts = Collections.singletonList(
-                AccountUtils.getActiveAccount(getContext()));
+//        List<Account> accounts = Arrays.asList(
+//                AccountUtils.getActiveAccount(getContext()));
+        List<Account> accounts = new ArrayList<>();
+        accounts.add(AccountUtils.getActiveAccount(getContext()));
+        accounts.add(new Account("yalin@gmail.com", GoogleAuthUtil.GOOGLE_ACCOUNT_TYPE));
         populateAccountList(accounts);
     }
 
@@ -246,11 +247,11 @@ public class AppNavigationViewAsDrawerImpl extends AppNavigationViewAbstractImpl
         mAccountSpinner.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    Intent switchUser = new Intent(getContext(), SwitchUserActivity.class);
-                    mActivity.startActivityForResult(switchUser, BaseActivity.SWITCH_USER_RESULT);
-                    return true;
-                }
+//                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+//                    Intent switchUser = new Intent(getContext(), SwitchUserActivity.class);
+//                    mActivity.startActivityForResult(switchUser, BaseActivity.SWITCH_USER_RESULT);
+//                    return true;
+//                }
                 return false;
             }
         });

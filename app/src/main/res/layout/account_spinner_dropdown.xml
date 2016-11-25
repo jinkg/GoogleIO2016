@@ -17,4 +17,14 @@
         app:maskDrawable="@drawable/circle_mask"
         app:srcCompat="@drawable/ic_default_avatar" />
 
+    <TextView
+        android:id="@+id/profile_email_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:paddingLeft="@dimen/action_button_padding"
+        android:textColor="@color/body_text_2"
+        android:textSize="@dimen/text_size_medium" />
 </LinearLayout>
