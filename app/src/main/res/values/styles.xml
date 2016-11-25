@@ -45,11 +45,15 @@
 
     <style name="Theme.GoogleIO" parent="Theme.GoogleIO.Base" />
 
+    <style name="Theme.GoogleIO.WithNavDrawer" parent="Theme.GoogleIO" />
+
     <style name="Theme.GoogleIO.Welcome.Base" parent="Theme.GoogleIO">
         <item name="android:windowBackground">@color/background</item>
     </style>
 
     <style name="Theme.GoogleIO.Welcome" parent="Theme.GoogleIO.Welcome.Base" />
+
+    <style name="Theme.GoogleIO.Light" parent="Theme.GoogleIO.WithNavDrawer" />
 
     <style name="Widget.GoogleIO.EditText" parent="Widget.AppCompat.EditText">
         <item name="background">@drawable/edit_text</item>

@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="navdrawer_profile_image_size">64dp</dimen>
+</resources>

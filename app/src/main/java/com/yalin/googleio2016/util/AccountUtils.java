@@ -18,8 +18,21 @@ public class AccountUtils {
 
     public static final String PREF_ACTIVE_ACCOUNT = "chosen_account";
 
+    private static final String PREFIX_PREF_PLUS_NAME = "plus_name_";
+    private static final String PREFIX_PREF_PLUS_IMAGE_URL = "plus_image_url_";
+    private static final String PREFIX_PREF_PLUS_COVER_URL = "plus_cover_url_";
+
     private static SharedPreferences getSharedPreferences(final Context context) {
         return PreferenceManager.getDefaultSharedPreferences(context);
+    }
+
+    protected static String makeAccountSpecificPrefKey(Context ctx, String prefix) {
+        return hasActiveAccount(ctx) ? makeAccountSpecificPrefKey(getActiveAccountName(ctx),
+                prefix) : null;
+    }
+
+    protected static String makeAccountSpecificPrefKey(String accountName, String prefix) {
+        return prefix + accountName;
     }
 
     public static boolean hasActiveAccount(final Context context) {
@@ -55,5 +68,29 @@ public class AccountUtils {
         LogUtil.d(TAG, "Clearing active account");
         SharedPreferences sp = getSharedPreferences(context);
         sp.edit().remove(PREF_ACTIVE_ACCOUNT).apply();
+    }
+
+    public static String getPlusName(final Context context) {
+        SharedPreferences sp = getSharedPreferences(context);
+        return hasActiveAccount(context) ? sp.getString(makeAccountSpecificPrefKey(context,
+                PREFIX_PREF_PLUS_NAME), null) : null;
+    }
+
+    public static String getPlusImageUrl(final Context context) {
+        SharedPreferences sp = getSharedPreferences(context);
+        return hasActiveAccount(context) ? sp.getString(makeAccountSpecificPrefKey(context,
+                PREFIX_PREF_PLUS_IMAGE_URL), null) : null;
+    }
+
+    public static String getPlusImageUrl(final Context context, final String accountName) {
+        SharedPreferences sp = getSharedPreferences(context);
+        return hasActiveAccount(context) ? sp.getString(makeAccountSpecificPrefKey(accountName,
+                PREFIX_PREF_PLUS_IMAGE_URL), null) : null;
+    }
+
+    public static String getPlusCoverUrl(final Context context) {
+        SharedPreferences sp = getSharedPreferences(context);
+        return hasActiveAccount(context) ? sp.getString(makeAccountSpecificPrefKey(context,
+                PREFIX_PREF_PLUS_COVER_URL), null) : null;
     }
 }

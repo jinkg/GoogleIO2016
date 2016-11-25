@@ -29,7 +29,24 @@ public class LogUtil {
         return BuildConfig.ENABLE_EXTERNAL_LOG;
     }
 
-    public static void d(String tag, String msg, Throwable throwable) {
+    public static void d(String tag, String msg) {
+        String procInfo = getProcessInfo();
+        Log.d(tag, procInfo + msg);
+    }
+
+    public static void f(String tag, String msg) {
+        String procInfo = getProcessInfo();
+
+        Log.d(tag, procInfo + msg);
+
+        if (!isExternalLogEnabled()) {
+            return;
+        }
+        tag = tag + ":debug";
+        writeLog(tag, procInfo + msg);
+    }
+
+    public static void e(String tag, String msg, Throwable throwable) {
         String stackTraces = formatStackTrance(throwable.getStackTrace());
         Throwable cause = throwable.getCause();
         if (cause != null) {
@@ -40,20 +57,23 @@ public class LogUtil {
         if (msg == null) {
             msg = "";
         }
-        d(tag, msg + " : " + throwable.getMessage() + "\n" + stackTraces);
+        e(tag, msg + " : " + throwable.getMessage() + "\n" + stackTraces);
     }
 
-    public static void d(String tag, String msg) {
+    public static void e(String tag, String msg) {
+        String procInfo = getProcessInfo();
 
-        String procInfo = "Process id: " + Process.myPid()
-                + " Thread id: " + Thread.currentThread().getId() + " ";
-
-        Log.d(tag, procInfo + msg);
+        Log.e(tag, procInfo + msg);
 
         if (!isExternalLogEnabled()) {
             return;
         }
         writeLog(tag, procInfo + msg);
+    }
+
+    private static String getProcessInfo() {
+        return "Process id: " + Process.myPid()
+                + " Thread id: " + Thread.currentThread().getId() + " ";
     }
 
     private static String formatStackTrance(StackTraceElement[] stackTraceElements) {

@@ -2,6 +2,7 @@ package com.yalin.googleio2016.login;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Handler;
 
 import com.google.android.gms.common.Scopes;
 import com.yalin.googleio2016.util.LogUtil;
@@ -49,7 +50,17 @@ public class LoginAndAuthWithGoogleApi implements LoginAndAuth {
 
     @Override
     public void start() {
+        final LoginAndAuthListener callbacks;
+        if (null != (callbacks = mCallbackRef.get())) {
+            final Handler h = new Handler();
+            h.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    callbacks.onAuthSuccess(mAccountName, true);
+                }
+            }, 300);
 
+        }
     }
 
     @Override

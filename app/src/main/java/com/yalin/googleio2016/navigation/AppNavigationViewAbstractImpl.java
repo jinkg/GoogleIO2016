@@ -22,7 +22,6 @@ import com.yalin.googleio2016.util.ActivityUtils;
  * .archframework} for getting its data and processing user actions. Some methods which are UI
  * specific are left abstract. Extend this class for full navigation functionality.
  */
-
 public abstract class AppNavigationViewAbstractImpl implements
         UpdatableView<NavigationModel, NavigationQueryEnum, NavigationUserActionEnum>,
         AppNavigationView {
@@ -100,11 +99,11 @@ public abstract class AppNavigationViewAbstractImpl implements
     }
 
     @Override
-    public void displayUserActionResult(NavigationModel mode,
+    public void displayUserActionResult(NavigationModel model,
                                         NavigationUserActionEnum userAction, boolean success) {
         switch (userAction) {
             case RELOAD_ITEMS:
-                displayNavigationItems(mode.getItems());
+                displayNavigationItems(model.getItems());
                 break;
         }
     }

@@ -10,5 +10,15 @@
     <string name="welcome_select_account_text">Please choose an account to use:</string>
     <string name="skip">Skip</string>
 
+    <string name="navdrawer_item_explore">Explore</string>
     <string name="navdrawer_item_sign_in">Sign in</string>
+    <string name="navdrawer_item_debug">Debug</string>
+    <string name="navdrawer_description_a11y">Navigation Menu</string>
+
+    <string name="switch_account_spinner_description_a11y">Switch account</string>
+
+    <string name="title_activity_debug_test_runner" translatable="false">Debug Test Runner</string>
+
+    <string name="talkback_selected">%1$s selected</string>
+    <string name="talkback_not_selected">%1$s not selected</string>
 </resources>

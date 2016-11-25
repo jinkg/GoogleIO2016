@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="navview_start_padding">16dp</dimen>
+    <dimen name="navview_end_padding">16dp</dimen>
+    <dimen name="navview_top_padding">16dp</dimen>
+    <dimen name="navview_header_bottom_padding">16dp</dimen>
+    <dimen name="navview_between_text_and_account_selector">16dp</dimen>
+    <dimen name="navview_account_list_top_padding">8dp</dimen>
+    <dimen name="navview_menu_item_top_bottom_padding">8dp</dimen>
+
+    <dimen name="navview_chosen_account_height">140dp</dimen>
+    <dimen name="navview_width">260dp</dimen>
+    <dimen name="navview_profile_image_size">40dp</dimen>
+
+    <string name="navview_header_user_image_content_description">User-defined Google
+        Account cover image</string>
+</resources>

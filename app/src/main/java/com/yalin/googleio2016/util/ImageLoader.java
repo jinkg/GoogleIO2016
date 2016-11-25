@@ -1,6 +1,7 @@
 package com.yalin.googleio2016.util;
 
 import android.content.Context;
+import android.widget.ImageView;
 
 /**
  * YaLin
@@ -10,5 +11,9 @@ import android.content.Context;
 public class ImageLoader {
 
     public ImageLoader(Context context) {
+    }
+
+    public void loadImage(String url, ImageView imageView) {
+
     }
 }
