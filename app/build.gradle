@@ -19,6 +19,7 @@ android {
         buildConfigField("boolean", "ENABLE_SIGNIN_IN_NAVIGATION", "true")
         buildConfigField("boolean", "ENABLE_SETTINGS_IN_NAVIGATION", "true")
         buildConfigField("String", "PREF_ATTENDEE_AT_VENUE", "\"pref_attendee_at_venue_${conf_version}\"")
+        buildConfigField("String", "PREF_DATA_BOOTSTRAP_DONE", "\"pref_bootstrap_done_${conf_version}\"")
     }
     buildTypes {
         release {
@@ -39,6 +40,8 @@ dependencies {
     compile "com.android.support:design:${android_support_lib_version}"
     compile "com.android.support:recyclerview-v7:${android_support_lib_version}"
     compile "com.android.support:preference-v7:${android_support_lib_version}"
+
+    compile 'com.google.code.gson:gson:2.4'
 
     androidTestCompile 'com.android.support.test:runner:0.5'
     androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.2'

@@ -26,6 +26,16 @@ public class SettingsUtils {
             CONFERENCE_YEAR_PREF_POSTFIX;
 
     /**
+     * Return true when the {@code R.raw.bootstrap_data_json bootstrap data} has been marked loaded.
+     *
+     * @param context Context to be used to lookup the {@link android.content.SharedPreferences}.
+     */
+    public static boolean isDataBootstrapDone(final Context context) {
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+        return sp.getBoolean(BuildConfig.PREF_DATA_BOOTSTRAP_DONE, false);
+    }
+
+    /**
      * Return true if user has accepted the
      * {@link WelcomeActivity Tos}, false if they haven't (yet).
      *
