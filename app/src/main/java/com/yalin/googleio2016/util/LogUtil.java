@@ -47,17 +47,11 @@ public class LogUtil {
     }
 
     public static void e(String tag, String msg, Throwable throwable) {
-        String stackTraces = formatStackTrance(throwable.getStackTrace());
-        Throwable cause = throwable.getCause();
-        if (cause != null) {
-            stackTraces = stackTraces + "cause:\n";
-            stackTraces = stackTraces
-                    + formatStackTrance(cause.getStackTrace());
-        }
+        String stackTraces = Log.getStackTraceString(throwable);
         if (msg == null) {
             msg = "";
         }
-        e(tag, msg + " : " + throwable.getMessage() + "\n" + stackTraces);
+        e(tag, msg + " :\n " + stackTraces);
     }
 
     public static void e(String tag, String msg) {
