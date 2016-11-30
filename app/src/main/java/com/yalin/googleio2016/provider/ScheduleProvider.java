@@ -210,6 +210,9 @@ public class ScheduleProvider extends ContentProvider {
         }
 
         switch (matchingUriEnum) {
+            case TAGS: {
+                return Tags.buildTagUri(values.getAsString(Tags.TAG_ID));
+            }
             case SESSIONS: {
                 return Sessions.buildSessionUri(values.getAsString(Sessions.SESSION_ID));
             }
@@ -227,12 +230,60 @@ public class ScheduleProvider extends ContentProvider {
 
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
-        return 0;
+        String accountName = getCurrentAccountName(uri, false);
+        LogUtil.d(TAG, "delete(uri=" + uri + ", account=" + accountName + ")");
+        if (uri == ScheduleContract.BASE_CONTENT_URI) {
+            // Handle whole database deletes (e.g. when signing out)
+            deleteDatabase();
+            notifyChange(uri);
+            return 1;
+        }
+        final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
+        final SelectionBuilder builder = buildSimpleSelection(uri);
+
+        int retVal = builder.where(selection, selectionArgs).delete(db);
+        notifyChange(uri);
+        return retVal;
     }
 
     @Override
     public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
         return 0;
+    }
+
+    /**
+     * Build a simple {@link SelectionBuilder} to match the requested
+     * {@link Uri}. This is usually enough to support {@link #insert},
+     * {@link #update}, and {@link #delete} operations.
+     */
+    private SelectionBuilder buildSimpleSelection(Uri uri) {
+        final SelectionBuilder builder = new SelectionBuilder();
+        ScheduleUriEnum matchingUriEnum = mUriMatcher.matchUri(uri);
+        // The main Uris, corresponding to the root of each type of Uri, do not have any selection
+        // criteria so the full table is used. The others apply a selection criteria.
+        switch (matchingUriEnum) {
+            case TAGS:
+            case SESSIONS:
+                return builder.table(matchingUriEnum.table);
+            case SESSIONS_ID: {
+                final String sessionId = Sessions.getSessionId(uri);
+                return builder.table(Tables.SESSIONS)
+                        .where(Sessions.SESSION_ID + "=?", sessionId);
+            }
+            case SESSIONS_ID_SPEAKERS: {
+                final String sessionId = Sessions.getSessionId(uri);
+                return builder.table(Tables.SESSIONS_SPEAKERS)
+                        .where(Sessions.SESSION_ID + "=?", sessionId);
+            }
+            case SESSIONS_ID_TAGS: {
+                final String sessionId = Sessions.getSessionId(uri);
+                return builder.table(Tables.SESSIONS_TAGS)
+                        .where(Sessions.SESSION_ID + "=?", sessionId);
+            }
+            default: {
+                throw new UnsupportedOperationException("Unknown uri for " + uri);
+            }
+        }
     }
 
     /**
