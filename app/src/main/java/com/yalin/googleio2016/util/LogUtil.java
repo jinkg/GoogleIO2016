@@ -29,6 +29,10 @@ public class LogUtil {
         return BuildConfig.ENABLE_EXTERNAL_LOG;
     }
 
+    public static boolean isLoggable() {
+        return BuildConfig.ENABLE_EXTERNAL_LOG;
+    }
+
     public static void d(String tag, String msg) {
         String procInfo = getProcessInfo();
         Log.d(tag, procInfo + msg);
@@ -44,6 +48,11 @@ public class LogUtil {
         }
         tag = tag + ":debug";
         writeLog(tag, procInfo + msg);
+    }
+
+    public static void w(String tag, String msg) {
+        String procInfo = getProcessInfo();
+        Log.w(tag, procInfo + msg);
     }
 
     public static void e(String tag, String msg, Throwable throwable) {

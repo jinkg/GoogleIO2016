@@ -18,6 +18,8 @@ public class AccountUtils {
 
     public static final String PREF_ACTIVE_ACCOUNT = "chosen_account";
 
+    // These names are are prefixes; the account is appended to them.
+    public static final String PREFIX_PREF_AUTH_TOKEN = "auth_token_";
     private static final String PREFIX_PREF_PLUS_NAME = "plus_name_";
     private static final String PREFIX_PREF_PLUS_IMAGE_URL = "plus_image_url_";
     private static final String PREFIX_PREF_PLUS_COVER_URL = "plus_cover_url_";
@@ -33,6 +35,13 @@ public class AccountUtils {
 
     protected static String makeAccountSpecificPrefKey(String accountName, String prefix) {
         return prefix + accountName;
+    }
+
+    public static String getAuthToken(final Context context) {
+        SharedPreferences sp = getSharedPreferences(context);
+        return hasActiveAccount(context) ?
+                sp.getString(makeAccountSpecificPrefKey(context, PREFIX_PREF_AUTH_TOKEN), null)
+                : null;
     }
 
     public static boolean hasActiveAccount(final Context context) {

@@ -1,11 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
-    <TextView
+    <ImageView
+        android:id="@android:id/empty"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Hello world" />
-</LinearLayout>
+        android:layout_height="match_parent"
+        android:background="@color/light_grey"
+        android:scaleType="centerInside"
+        android:visibility="gone"
+        app:srcCompat="@drawable/io_logo"
+        tools:ignore="ContentDescription" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/explore_card_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbarStyle="insideOverlay"
+        android:scrollbars="vertical"
+        app:layoutManager="android.support.v7.widget.LinearLayoutManager" />
+</FrameLayout>

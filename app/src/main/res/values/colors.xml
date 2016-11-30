@@ -25,6 +25,9 @@
     <color name="app_io_logo_tint">#FF26C6DA</color>
     <color name="divider">#1f000000</color>
 
+    <color name="light_grey">#ffeeeeee</color>
+    <color name="lighter_gray">#ddd</color>
+
     <color name="light_content_scrim">#0d000000</color>
 
     <color name="theme_primary">@color/app_primary_accent</color>
@@ -55,4 +58,6 @@
     <color name="navdrawer_icon_tint">#444</color>
     <color name="navdrawer_icon_tint_selected">@color/cyan_a700_plus</color>
     <color name="navdrawer_selected_item_background">#1a000000</color>
+
+    <color name="default_session_color">@color/theme_primary</color>
 </resources>

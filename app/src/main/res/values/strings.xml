@@ -21,4 +21,69 @@
 
     <string name="talkback_selected">%1$s selected</string>
     <string name="talkback_not_selected">%1$s not selected</string>
+
+    <!-- Shown in a drop-down list on the main screen, indicating that all conference themes
+    are being displayed. Themes are major categories for sessions (the themes are Design,
+    Develop and Distribute). -->
+    <string name="all_themes">All Themes</string>
+
+    <!-- Shown in a drop-down list on the main screen, indicating that all conference topics
+    are being displayed. Topics are major categories for sessions (example topics are: Android,
+    Chrome, Google APIs, Wearables, etc). -->
+    <string name="all_topics">All Topics</string>
+
+    <!-- Short text appended to the end of the session subtitle when the session is currently being
+   streamed. Also used in a "LIVE" badge overlay that shows up on top of the session card.
+   Constrained because the session subtitle should be small enough to fit into the
+   explore cards. [CHAR_LIMIT=10] -->
+    <string name="live_now">LIVE NOW</string>
+
+    <string name="session_feedback_tell_us" description="Hint for adding other session feedback">Other session feedback?</string>
+
+    <!-- Shown in a drop-down list on the main screen, indicating that all session types
+    are being displayed. Some examples of session types are: session, office hours, code lab. -->
+    <string name="all_types">All Types</string>
+
+    <!-- Short text label indicating a grouping of themes -->
+    <string name="themes">Themes</string>
+
+    <!-- Label for exploration category which groups session topics -->
+    <string name="topics">Topics</string>
+
+    <!-- Label for exploration category which groups session types -->
+    <string name="types">Types</string>
+
+    <!-- A single button shown on informative popups, like EULA, open source licenses and About -->
+    <string name="ok">OK</string>
+
+    <!-- An application permission (this permission allows the application to modify the Google
+   I/O schedule data). Shows on a permissions dialog screen. -->
+    <string name="permission_write">Modify Google I/O schedule data</string>
+
+    <!-- Toast failure message if the user's wifi couldn't be updated -->
+    <string name="wifi_install_error_message">Sorry, unable to update WiFi configuration</string>
+
+    <!-- This is used on the Explore I/O message cards to answer yes to a particular message -->
+    <string name="explore_io_msgcards_answer_yes">Sure, let\'s do it!</string>
+
+    <!-- This is used on the Explore I/O message cards to answer no to a particular message -->
+    <string name="explore_io_msgcards_answer_no">No thanks</string>
+
+    <!-- BEGIN Explore Message Card User Messages -->
+    <string name="explore_io_notifications_ask_opt_in" description="This message is displayed on the Explore I/O screen to ask users whether
+        they would like to opt in to receive notifications for the sessions the have added to their schedule."><![CDATA[
+        <b>Session Notifications</b><br/>
+        Would you like to receive notifications for sessions on your schedule?]]></string>
+
+     <string name="explore_io_msgcards_ask_opt_in" description="This message is displayed on the Explore I/O screen to ask users whether
+            they would like to opt in to receive messages regarding the conference."><![CDATA[
+        <b>Conference Messages</b><br/>
+        Would you like to receive important messages about the conference? Messages are time based and may include promotional messages from partners.]]></string>
+
+    <!-- Text of a card shown in the Explore I/O screen that asks the user if they want to configure
+         the conference WiFi. "Not now" and "Yes, please" are options show on the card -->
+    <string name="question_setup_wifi_card_text"><![CDATA[
+        <b>Conference Wi-Fi</b><br/>
+        Would you like to setup this device to
+        access the 5 Ghz conference Wi-Fi?]]></string>
 </resources>

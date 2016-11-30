@@ -23,6 +23,10 @@ import android.util.TypedValue;
 public class UIUtils {
     private static final String TAG = "UIUtils";
 
+    public static final String MOCK_DATA_PREFERENCES = "mock_data";
+    public static final String PREFS_MOCK_CURRENT_TIME = "mock_current_time";
+    public static final String PREFS_MOCK_APP_START_TIME = "mock_app_start_time";
+
     /**
      * Queries the theme of the given {@code context} for a theme color.
      *

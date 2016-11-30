@@ -18,6 +18,7 @@ import com.yalin.googleio2016.login.LoginStateListener;
 import com.yalin.googleio2016.messaging.MessagingRegistration;
 import com.yalin.googleio2016.navigation.AppNavigationViewAsDrawerImpl;
 import com.yalin.googleio2016.navigation.NavigationModel.NavigationItemEnum;
+import com.yalin.googleio2016.service.DataBootstrapService;
 import com.yalin.googleio2016.sync.account.Account;
 import com.yalin.googleio2016.util.AccountUtils;
 import com.yalin.googleio2016.util.ImageLoader;
@@ -84,6 +85,8 @@ public abstract class BaseActivity extends AppCompatActivity implements
     @Override
     protected void onResume() {
         super.onResume();
+
+        DataBootstrapService.startDataBootstrapIfNecessary(this);
 
         startLoginProcess();
     }

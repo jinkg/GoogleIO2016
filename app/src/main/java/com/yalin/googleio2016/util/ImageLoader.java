@@ -13,6 +13,14 @@ public class ImageLoader {
     public ImageLoader(Context context) {
     }
 
+    /**
+     * Construct an ImageLoader with a default placeholder drawable.
+     */
+    public ImageLoader(Context context, int placeHolderResId) {
+        this(context);
+//        mPlaceHolderResId = placeHolderResId;
+    }
+
     public void loadImage(String url, ImageView imageView) {
 
     }

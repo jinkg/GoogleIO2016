@@ -2,7 +2,15 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.yalin.googleio2016">
 
+    <permission
+        android:name="com.yalin.googleio2016.permission.WRITE_SCHEDULE"
+        android:description="@string/permission_write"
+        android:label="@string/permission_write"
+        android:protectionLevel="normal" />
+
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
@@ -44,6 +52,18 @@
             android:name=".login.SwitchUserActivity"
             android:exported="false"
             android:theme="@style/Theme.GoogleIO.Transparent" />
+
+        <provider
+            android:name=".provider.ScheduleProvider"
+            android:authorities="com.yalin.googleio2016"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:syncable="true"
+            android:writePermission="com.yalin.googleio2016.permission.WRITE_SCHEDULE" />
+
+        <service
+            android:name=".service.DataBootstrapService"
+            android:exported="false" />
 
         <service android:name=".sync.account.AuthenticatorService">
             <intent-filter>
