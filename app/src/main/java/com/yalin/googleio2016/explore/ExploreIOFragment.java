@@ -4,9 +4,12 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -38,11 +41,17 @@ import com.yalin.googleio2016.explore.data.SessionData;
 import com.yalin.googleio2016.injection.ModelProvider;
 import com.yalin.googleio2016.provider.ScheduleContract;
 import com.yalin.googleio2016.session.SessionDetailActivity;
+import com.yalin.googleio2016.settings.ConfMessageCardUtils;
+import com.yalin.googleio2016.settings.ConfMessageCardUtils.ConferencePrefChangeListener;
 import com.yalin.googleio2016.settings.SettingsUtils;
+import com.yalin.googleio2016.ui.widget.DrawShadowFrameLayout;
 import com.yalin.googleio2016.ui.widget.recyclerview.ItemMarginDecoration;
 import com.yalin.googleio2016.ui.widget.recyclerview.UpdatableAdapter;
+import com.yalin.googleio2016.util.AccountUtils;
 import com.yalin.googleio2016.util.ImageLoader;
+import com.yalin.googleio2016.util.ThrottledContentObserver;
 import com.yalin.googleio2016.util.TimeUtils;
+import com.yalin.googleio2016.util.UIUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -85,8 +94,31 @@ public class ExploreIOFragment extends Fragment
 
     private List<UserActionListener> mListeners = new ArrayList<>();
 
+    private ThrottledContentObserver mSessionsObserver, mTagsObserver;
+
+    private ConferencePrefChangeListener mConfMessagesAnswerChangeListener =
+            new ConferencePrefChangeListener() {
+                @Override
+                protected void onPrefChanged(String key, boolean value) {
+                    fireReloadEvent();
+                }
+            };
+
+    private OnSharedPreferenceChangeListener mSettingsChangeListener =
+            new OnSharedPreferenceChangeListener() {
+                @Override
+                public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+                    if (SettingsUtils.PREF_DECLINED_WIFI_SETUP.equals(key)) {
+                        fireReloadEvent();
+                    } else if (AccountUtils.PREF_ACTIVE_ACCOUNT.equals(key)) {
+                        fireReloadEvent();
+                    }
+                }
+            };
+
     @Nullable
     @Override
+
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container,
                              Bundle savedInstanceState) {
@@ -169,20 +201,53 @@ public class ExploreIOFragment extends Fragment
         super.onResume();
         getActivity().invalidateOptionsMenu();
 
-        // TODO: 2016/11/30 add draw shadow frame layout
+        final DrawShadowFrameLayout drawShadowFrameLayout =
+                (DrawShadowFrameLayout) getActivity().findViewById(R.id.main_content);
+        if (drawShadowFrameLayout != null) {
+            // configure fragment's top clearance to take our overlaid Toolbar into account.
+            drawShadowFrameLayout.setShadowTopOffset(UIUtils.calculateActionBarSize(getActivity()));
+        }
     }
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        // TODO: 2016/11/30
+        ConfMessageCardUtils.registerPreferencesChangeListener(getContext(),
+                mConfMessagesAnswerChangeListener);
+
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getContext());
+        sp.registerOnSharedPreferenceChangeListener(mSettingsChangeListener);
+
+        mSessionsObserver = new ThrottledContentObserver(new ThrottledContentObserver.Callbacks() {
+            @Override
+            public void onThrottledContentObserverFired() {
+                fireReloadEvent();
+                fireReloadTagsEvent();
+            }
+        });
+        mTagsObserver = new ThrottledContentObserver(new ThrottledContentObserver.Callbacks() {
+            @Override
+            public void onThrottledContentObserverFired() {
+                fireReloadTagsEvent();
+            }
+        });
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
+        if (mConfMessagesAnswerChangeListener != null) {
+            ConfMessageCardUtils.unregisterPreferencesChangeListener(getContext(),
+                    mConfMessagesAnswerChangeListener);
+        }
+        if (mSettingsChangeListener != null) {
+            SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getContext());
+            sp.unregisterOnSharedPreferenceChangeListener(mSettingsChangeListener);
+        }
 
-        // TODO: 2016/11/30
+        getActivity().getContentResolver().unregisterContentObserver(mSessionsObserver);
+        getActivity().getContentResolver().unregisterContentObserver(mTagsObserver);
+
     }
 
     private void fireReloadEvent() {
@@ -705,4 +770,5 @@ public class ExploreIOFragment extends Fragment
             clickableItem = (ViewGroup) itemView.findViewById(R.id.explore_io_clickable_item);
         }
     }
+
 }

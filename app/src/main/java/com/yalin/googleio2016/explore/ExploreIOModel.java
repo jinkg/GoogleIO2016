@@ -105,18 +105,18 @@ public class ExploreIOModel extends ModelWithLoaderManager<ExploreIOModel.Explor
                 loader = TagMetadata.createCursorLoader(mContext);
                 break;
             case CARDS:
-//                String currentTime = TimeUtils.getCurrentTime(mContext) + "";
-//                LogUtil.d(TAG, "Starting cards query: " + currentTime);
-//                loader = getCursorLoaderInstance(mContext, ScheduleContract.Cards.CONTENT_URI,
-//                        ExploreIOQueryEnum.CARDS.getProjection(),
-//                        " ? > " + ScheduleContract.Cards.DISPLAY_START_DATE + " AND ? < " +
-//                                ScheduleContract.Cards.DISPLAY_END_DATE + " AND " +
-//                                ScheduleContract.Cards.ACTION_TYPE + " IN ('" +
-//                                EventCard.ACTION_TYPE_LINK + "', '" +
-//                                EventCard.ACTION_TYPE_MAP + "', '" +
-//                                EventCard.ACTION_TYPE_SESSION + "')",
-//                        new String[]{currentTime, currentTime},
-//                        ScheduleContract.Cards.CARD_ID);
+                String currentTime = TimeUtils.getCurrentTime(mContext) + "";
+                LogUtil.d(TAG, "Starting cards query: " + currentTime);
+                loader = getCursorLoaderInstance(mContext, ScheduleContract.Cards.CONTENT_URI,
+                        ExploreIOQueryEnum.CARDS.getProjection(),
+                        " ? > " + ScheduleContract.Cards.DISPLAY_START_DATE + " AND ? < " +
+                                ScheduleContract.Cards.DISPLAY_END_DATE + " AND " +
+                                ScheduleContract.Cards.ACTION_TYPE + " IN ('" +
+                                EventCard.ACTION_TYPE_LINK + "', '" +
+                                EventCard.ACTION_TYPE_MAP + "', '" +
+                                EventCard.ACTION_TYPE_SESSION + "')",
+                        new String[]{currentTime, currentTime},
+                        ScheduleContract.Cards.CARD_ID);
                 break;
         }
         return loader;

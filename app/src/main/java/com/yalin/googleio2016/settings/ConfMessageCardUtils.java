@@ -3,6 +3,7 @@ package com.yalin.googleio2016.settings;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
@@ -269,6 +270,58 @@ public class ConfMessageCardUtils {
             if (card.isTimeActive(currentTime)) {
                 markShouldShowConfMessageCard(context, card, true);
             }
+        }
+    }
+
+    /**
+     * Register a {@code listener} which is notified when these settings are changed.
+     *
+     * @param context  A context that has the same lifecycle as the listener that will be returned.
+     * @param listener Listener to register.
+     */
+    public static void registerPreferencesChangeListener(final Context context,
+                                                         ConferencePrefChangeListener listener) {
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+        sp.registerOnSharedPreferenceChangeListener(listener);
+    }
+
+    /**
+     * Unregister a {@code listener} which is notified when these settings are changed.
+     *
+     * @param context  A context that has the same lifecycle as the listener that will be returned.
+     * @param listener Listener to unregister.
+     */
+    public static void unregisterPreferencesChangeListener(final Context context,
+                                                           ConferencePrefChangeListener listener) {
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+        sp.unregisterOnSharedPreferenceChangeListener(listener);
+    }
+
+    public static boolean isConfMessageKey(@NonNull String key) {
+        return key.startsWith(ConfMessageCardUtils.dismiss_prefix) || key.startsWith(should_show_prefix);
+    }
+
+    /**
+     * Class that listens for {@link ConfMessageCardUtils} specific preferences and calls
+     * onPrefChanged with the specific key and value.
+     */
+    public static class ConferencePrefChangeListener
+            implements SharedPreferences.OnSharedPreferenceChangeListener {
+
+        @Override
+        public void onSharedPreferenceChanged(SharedPreferences sp, String key) {
+            if (PREF_ANSWERED_CONF_MESSAGE_CARDS_PROMPT.equals(key)) {
+                onPrefChanged(PREF_ANSWERED_CONF_MESSAGE_CARDS_PROMPT,
+                        sp.getBoolean(PREF_ANSWERED_CONF_MESSAGE_CARDS_PROMPT, true));
+            } else if (BuildConfig.PREF_CONF_MESSAGES_ENABLED.equals(key)) {
+                onPrefChanged(BuildConfig.PREF_CONF_MESSAGES_ENABLED,
+                        sp.getBoolean(BuildConfig.PREF_CONF_MESSAGES_ENABLED, false));
+            } else {
+                onPrefChanged(key, sp.getBoolean(key, false));
+            }
+        }
+
+        protected void onPrefChanged(String key, boolean value) {
         }
     }
 }

@@ -2,6 +2,8 @@ package com.yalin.googleio2016.util;
 
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.res.Resources;
+import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.os.Build;
@@ -14,6 +16,8 @@ import android.support.annotation.NonNull;
 import android.support.graphics.drawable.VectorDrawableCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.TypedValue;
+
+import com.yalin.googleio2016.R;
 
 /**
  * YaLin
@@ -81,5 +85,30 @@ public class UIUtils {
         vector.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
         vector.draw(canvas);
         return bitmap;
+    }
+
+    private static final int[] RES_IDS_ACTION_BAR_SIZE = {R.attr.actionBarSize};
+
+    /**
+     * Calculates the Action Bar height in pixels.
+     */
+    public static int calculateActionBarSize(Context context) {
+        if (context == null) {
+            return 0;
+        }
+
+        Resources.Theme curTheme = context.getTheme();
+        if (curTheme == null) {
+            return 0;
+        }
+
+        TypedArray att = curTheme.obtainStyledAttributes(RES_IDS_ACTION_BAR_SIZE);
+        if (att == null) {
+            return 0;
+        }
+
+        float size = att.getDimension(0, 0);
+        att.recycle();
+        return (int) size;
     }
 }
