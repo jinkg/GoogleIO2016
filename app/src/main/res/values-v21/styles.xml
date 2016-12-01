@@ -10,6 +10,24 @@
         <item name="imageItemBackground">?android:selectableItemBackgroundBorderless</item>
     </style>
 
+    <style name="Theme.GoogleIO.WithNavDrawer" parent="Theme.GoogleIO">
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+    </style>
+
+    <style name="Theme.GoogleIO.Light" parent="Theme.GoogleIO.WithNavDrawer">
+        <item name="colorPrimaryDark">@color/dark_status_bar</item>
+    </style>
+
+    <style name="Theme.GoogleIO.ExploreSessions" parent="Theme.GoogleIO.Light">
+        <item name="android:windowEnterTransition">@transition/fade_system_chrome</item>
+    </style>
+
+    <style name="Theme.GoogleIO.Welcome" parent="Theme.GoogleIO.Welcome.Base">
+        <item name="android:statusBarColor">@color/dark_status_bar</item>
+        <item name="android:navigationBarColor">@color/welcome_nav_bar</item>
+    </style>
+
     <style name="Theme.GoogleIO.AlertDialog" parent="android:Theme.Material.Light.Dialog">
         <item name="android:colorPrimary">@color/theme_primary</item>
         <item name="android:colorPrimaryDark">@color/theme_primary_dark</item>

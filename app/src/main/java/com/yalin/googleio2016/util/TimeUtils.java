@@ -7,6 +7,7 @@ import android.text.format.DateUtils;
 import com.yalin.googleio2016.BuildConfig;
 import com.yalin.googleio2016.settings.SettingsUtils;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -76,6 +77,30 @@ public class TimeUtils {
     private static long getAppStartTime(final Context context) {
         return context.getSharedPreferences(UIUtils.MOCK_DATA_PREFERENCES, Context.MODE_PRIVATE)
                 .getLong(UIUtils.PREFS_MOCK_APP_START_TIME, System.currentTimeMillis());
+    }
+
+    /**
+     * Format a {@code date} honoring the app preference for using Conference or device timezone.
+     * {@code Context} is used to lookup the shared preference settings.
+     */
+    public static String formatShortDate(Context context, Date date) {
+        StringBuilder sb = new StringBuilder();
+        Formatter formatter = new Formatter(sb);
+        return DateUtils.formatDateRange(context, formatter, date.getTime(), date.getTime(),
+                DateUtils.FORMAT_ABBREV_ALL | DateUtils.FORMAT_NO_YEAR,
+                SettingsUtils.getDisplayTimeZone(context).getID()).toString();
+    }
+
+    public static String formatShortTime(Context context, Date time) {
+        // Android DateFormatter will honor the user's current settings.
+        DateFormat format = android.text.format.DateFormat.getTimeFormat(context);
+        // Override with Timezone based on settings since users can override their phone's timezone
+        // with Pacific time zones.
+        TimeZone tz = SettingsUtils.getDisplayTimeZone(context);
+        if (tz != null) {
+            format.setTimeZone(tz);
+        }
+        return format.format(time);
     }
 
     public static String formatShortDateTime(Context context, Date date) {

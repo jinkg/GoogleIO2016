@@ -6,6 +6,7 @@
     <color name="io16_primary_cyan">#ff25c5d9</color>
     <color name="io16_primary_purple">#ff5d6abf</color>
     <color name="io16_primary_blue_grey">#ff445963</color>
+    <color name="io16_light_grey">#ffebeef0</color>
     <color name="io16_accent_red">#ffff5151</color>
     <color name="io16_accent_cyan">#ff4ccfe0</color>
     <color name="io16_accent_light_cyan">#ff8cedea</color>
@@ -16,6 +17,11 @@
     <color name="large_dark_icon">#66000000</color>
     <color name="cyan_a700_plus">#ff006574</color>
     <color name="navview_icon">#ff444444</color>
+    <color name="dark_status_bar">#ff949595</color>
+    <color name="light_status_bar_against_toolbar">#ffe8eaea</color>
+    <color name="light_status_bar_against_header_img">#ffe0e1e3</color>
+    <color name="immersive_status_bar">#26000000</color> <!-- 15% black -->
+    <color name="immersive_light_status_bar">#13000000</color> <!-- 7.5% black -->
 
     <color name="app_primary_accent">#FF26C6DA</color>
     <color name="app_secondary_accent">#1A000000</color>
@@ -52,6 +58,8 @@
     <color name="body_text_1_inverse">#deffffff</color>
     <color name="body_text_2_inverse">#8affffff</color>
 
+    <color name="more_button_background">#40707070</color>
+
     <color name="navdrawer_background">#ffffffff</color>
     <color name="navdrawer_text_color">@color/body_text_1</color>
     <color name="navdrawer_text_color_selected">@color/cyan_a700_plus</color>
@@ -60,4 +68,16 @@
     <color name="navdrawer_selected_item_background">#1a000000</color>
 
     <color name="default_session_color">@color/theme_primary</color>
+
+    <color name="track_header_tint">#20ffffff
+    </color> <!-- background protection for overlaid text -->
+    <array name="session_tile_backgrounds">
+        <item>#ffeceff1</item>
+        <item>#fffafbfc</item>
+        <item>#fff4f5f7</item>
+    </array>
+
+    <color name="hash_io_monochrome">#15000000</color> <!-- 8% black -->
+
+    <color name="welcome_nav_bar">#ff296e78</color>
 </resources>

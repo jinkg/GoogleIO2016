@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.yalin.googleio2016.ui.widget.ForegroundLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="@dimen/compact_list_tile"
+    android:layout_height="@dimen/compact_list_tile"
+    android:foreground="?android:selectableItemBackground"
+    android:orientation="vertical"
+    android:stateListAnimator="@animator/raise">
+
+    <com.yalin.googleio2016.ui.widget.VideoThumbnail
+        android:id="@+id/thumbnail"
+        android:layout_width="match_parent"
+        android:layout_height="0dp" />
+
+    <TextView
+        android:id="@+id/title"
+        style="@style/Body2Text"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:ellipsize="end"
+        android:padding="@dimen/padding_normal" />
+
+</com.yalin.googleio2016.ui.widget.ForegroundLinearLayout>

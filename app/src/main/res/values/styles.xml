@@ -53,7 +53,17 @@
 
     <style name="Theme.GoogleIO.Welcome" parent="Theme.GoogleIO.Welcome.Base" />
 
+    <style name="Theme.GoogleIO.SessionDetails.SizeBase" parent="Theme.GoogleIO">
+        <item name="android:windowIsFloating">false</item>
+    </style>
+
+    <style name="Theme.GoogleIO.SessionDetails.VersionBase" parent="Theme.GoogleIO.SessionDetails.SizeBase" />
+
+    <style name="Theme.GoogleIO.SessionDetails" parent="Theme.GoogleIO.SessionDetails.VersionBase" />
+
     <style name="Theme.GoogleIO.Light" parent="Theme.GoogleIO.WithNavDrawer" />
+
+    <style name="Theme.GoogleIO.ExploreSessions" parent="Theme.GoogleIO.Light" />
 
     <style name="Theme.GoogleIO.Transparent" parent="Theme.GoogleIO.Light">
         <item name="android:windowIsTranslucent">true</item>
@@ -87,6 +97,12 @@
         <item name="android:textColor">?android:textColorSecondary</item>
     </style>
 
+    <style name="TextAppearance.Body2" parent="TextAppearance.AppCompat.Body2">
+        <item name="android:textSize">14sp</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textColor">?android:textColorSecondary</item>
+    </style>
+
     <style name="TextAppearance.LargePopupMenu" parent="TextAppearance.AppCompat.Widget.PopupMenu.Large">
         <item name="android:textColor">@color/body_text_1</item>
     </style>
@@ -102,11 +118,28 @@
         <item name="android:textAppearance">@style/TextAppearance.Body1</item>
     </style>
 
+    <style name="Body2Text">
+        <item name="android:textAppearance">@style/TextAppearance.Body2</item>
+        <item name="android:lineSpacingMultiplier">@dimen/body_1_spacing</item>
+    </style>
+
+    <style name="SessionTitle">
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Subhead</item>
+        <item name="android:lineSpacingMultiplier">@dimen/h3_spacing</item>
+    </style>
+
     <style name="SettingsPreferenceThemeOverlay" parent="PreferenceThemeOverlay">
         <item name="switchPreferenceCompatStyle">@style/SettingsSwitchPreference</item>
     </style>
 
     <style name="SettingsSwitchPreference" parent="Preference.SwitchPreferenceCompat">
         <item name="android:layout">@layout/google_io_preference</item>
+    </style>
+
+    <style name="MoreButton">
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Button</item>
+        <item name="android:textSize">@dimen/app_text_size_small</item>
+        <item name="android:background">@drawable/more_button_background</item>
+        <item name="android:letterSpacing">0.1</item>
     </style>
 </resources>

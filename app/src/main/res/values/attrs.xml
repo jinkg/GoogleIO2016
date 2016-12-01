@@ -16,4 +16,24 @@
         <attr name="desaturateOnPress" format="boolean" />
     </declare-styleable>
 
+    <declare-styleable name="ThemeGoogleIO">
+        <attr name="isFloatingWindow" format="boolean" />
+        <attr name="videoThumbnailStyle" format="reference" />
+    </declare-styleable>
+
+    <declare-styleable name="AspectRatioView">
+        <attr name="aspectRatio" format="float" />
+    </declare-styleable>
+
+    <declare-styleable name="ForegroundView">
+        <attr name="android:foreground" />
+        <attr name="android:foregroundInsidePadding" />
+        <attr name="android:foregroundGravity" />
+    </declare-styleable>
+
+    <declare-styleable name="VideoThumbnail">
+        <attr name="playIcon" format="reference" />
+        <attr name="playedTint" format="color" />
+    </declare-styleable>
+
 </resources>

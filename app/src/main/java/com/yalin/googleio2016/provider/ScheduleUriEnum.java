@@ -23,7 +23,8 @@ public enum ScheduleUriEnum {
     SESSIONS_ID_SPEAKERS(406, "sessions/*/speakers", ScheduleContract.Speakers.CONTENT_TYPE_ID, false,
             ScheduleDatabase.Tables.SESSIONS_SPEAKERS),
     SESSIONS_ID_TAGS(407, "sessions/*/tags", ScheduleContract.Tags.CONTENT_TYPE_ID, false,
-            ScheduleDatabase.Tables.SESSIONS_TAGS);
+            ScheduleDatabase.Tables.SESSIONS_TAGS),
+    CARDS(1500, "cards", ScheduleContract.Cards.CONTENT_TYPE_ID, false, ScheduleDatabase.Tables.CARDS);
 
     public int code;
 

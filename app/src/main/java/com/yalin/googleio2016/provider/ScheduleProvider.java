@@ -210,6 +210,10 @@ public class ScheduleProvider extends ContentProvider {
         }
 
         switch (matchingUriEnum) {
+            case CARDS: {
+                return ScheduleContract.Cards.buildCardUri(values.getAsString(
+                        ScheduleContract.Cards.CARD_ID));
+            }
             case TAGS: {
                 return Tags.buildTagUri(values.getAsString(Tags.TAG_ID));
             }
@@ -262,6 +266,7 @@ public class ScheduleProvider extends ContentProvider {
         // The main Uris, corresponding to the root of each type of Uri, do not have any selection
         // criteria so the full table is used. The others apply a selection criteria.
         switch (matchingUriEnum) {
+            case CARDS:
             case TAGS:
             case SESSIONS:
                 return builder.table(matchingUriEnum.table);
@@ -298,6 +303,9 @@ public class ScheduleProvider extends ContentProvider {
             throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
         switch (matchingUriEnum) {
+            case CARDS: {
+                return builder.table(Tables.CARDS);
+            }
             case TAGS: {
                 return builder.table(Tables.TAGS);
             }

@@ -33,9 +33,44 @@
         </activity>
 
         <activity
+            android:name=".explore.ExploreSessionsActivity"
+            android:exported="true"
+            android:label="@string/title_explore"
+            android:theme="@style/Theme.GoogleIO.ExploreSessions">
+            <intent-filter>
+
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="vnd.android.cursor.dir/vnd.googleio2016.session" />
+            </intent-filter>
+
+        </activity>
+
+        <activity
             android:name=".welcome.WelcomeActivity"
             android:exported="false"
             android:theme="@style/Theme.GoogleIO.Welcome" />
+
+        <activity
+            android:name=".session.SessionDetailActivity"
+            android:exported="true"
+            android:label="@string/title_session_detail"
+            android:theme="@style/Theme.GoogleIO.SessionDetails">
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="vnd.android.cursor.item/vnd.googleio2016.session" />
+            </intent-filter>
+
+            <intent-filter>
+                <action android:name="android.nfc.action.NDEF_DISCOVERD" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="vnd.android.cursor.item/vnd.googleio2016.session" />
+            </intent-filter>
+
+        </activity>
 
         <activity
             android:name=".debug.DebugActivity"

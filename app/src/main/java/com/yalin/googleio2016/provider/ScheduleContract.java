@@ -446,6 +446,14 @@ public final class ScheduleContract {
         }
 
         /**
+         * Build {@link Uri} that references sessions that have begun after the requested time.
+         */
+        public static Uri buildSessionsAfterUri(long time) {
+            return CONTENT_URI.buildUpon().appendPath(PATH_AFTER)
+                    .appendPath(String.valueOf(time)).build();
+        }
+
+        /**
          * Read {@link #SESSION_ID} from {@link Sessions} {@link Uri}.
          */
         public static String getSessionId(Uri uri) {

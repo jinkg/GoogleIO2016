@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
 
+import com.yalin.googleio2016.provider.ScheduleContract.Cards;
 import com.yalin.googleio2016.provider.ScheduleContract.MySchedule;
 import com.yalin.googleio2016.provider.ScheduleContract.Rooms;
 import com.yalin.googleio2016.provider.ScheduleContract.RoomsColumns;
@@ -32,9 +33,11 @@ public class ScheduleDatabase extends SQLiteOpenHelper {
 
     private static final int VER_2016_11_30 = 1; // app version 1.0
     private static final int VER_2016_11_30B = 2;
-    private static final int CUR_DATABASE_VERSION = VER_2016_11_30B;
+    private static final int VER_2016_11_30C = 3;
+    private static final int CUR_DATABASE_VERSION = VER_2016_11_30C;
 
     interface Tables {
+        String CARDS = "cards";
         String TAGS = "tags";
         String ROOMS = "rooms";
         String SESSIONS = "sessions";
@@ -162,6 +165,7 @@ public class ScheduleDatabase extends SQLiteOpenHelper {
                 + SessionsSpeakers.SPEAKER_ID + ") ON CONFLICT REPLACE)");
 
         upgradeFrom30to30B(db);
+        upgradeFrom30Bto30C(db);
     }
 
     @Override
@@ -178,9 +182,16 @@ public class ScheduleDatabase extends SQLiteOpenHelper {
             version = VER_2016_11_30B;
         }
 
+        if (version == VER_2016_11_30B) {
+            LogUtil.d(TAG, "Upgrading database from 30B to 30C.");
+            upgradeFrom30Bto30C(db);
+            version = VER_2016_11_30C;
+        }
+
         if (version != CUR_DATABASE_VERSION) {
             LogUtil.w(TAG, "Upgrade unsuccessful -- destroying old data during upgrade");
 
+            db.execSQL("DROP TABLE IF EXISTS " + Tables.CARDS);
             db.execSQL("DROP TABLE IF EXISTS " + Tables.TAGS);
             db.execSQL("DROP TABLE IF EXISTS " + Tables.ROOMS);
             db.execSQL("DROP TABLE IF EXISTS " + Tables.SESSIONS);
@@ -198,6 +209,24 @@ public class ScheduleDatabase extends SQLiteOpenHelper {
         // Note: Adding photoUrl to tags
         db.execSQL("ALTER TABLE " + Tables.TAGS
                 + " ADD COLUMN " + TagsColumns.TAG_PHOTO_URL + " TEXT");
+    }
+
+    private void upgradeFrom30Bto30C(SQLiteDatabase db) {
+        db.execSQL("CREATE TABLE " + Tables.CARDS + " ("
+                + BaseColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + Cards.ACTION_COLOR + " TEXT, "
+                + Cards.ACTION_TEXT + " TEXT, "
+                + Cards.ACTION_URL + " TEXT, "
+                + Cards.BACKGROUND_COLOR + " TEXT, "
+                + Cards.CARD_ID + " TEXT, "
+                + Cards.DISPLAY_END_DATE + " INTEGER, "
+                + Cards.DISPLAY_START_DATE + " INTEGER, "
+                + Cards.MESSAGE + " TEXT, "
+                + Cards.TEXT_COLOR + " TEXT, "
+                + Cards.TITLE + " TEXT,  "
+                + Cards.ACTION_TYPE + " TEXT,  "
+                + Cards.ACTION_EXTRA + " TEXT, "
+                + "UNIQUE (" + Cards.CARD_ID + ") ON CONFLICT REPLACE)");
     }
 
     public static void deleteDatabase(Context context) {

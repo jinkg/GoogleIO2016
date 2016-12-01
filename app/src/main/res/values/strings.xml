@@ -17,10 +17,22 @@
 
     <string name="switch_account_spinner_description_a11y">Switch account</string>
 
+    <!-- Navigation bar text for exploring the sessions -->
+    <string name="title_explore">Explore</string>
+
+    <!-- Map breadcrumb text for navigating session entries -->
+    <string name="title_session_detail">Session Information</string>
+
     <string name="title_activity_debug_test_runner" translatable="false">Debug Test Runner</string>
 
     <string name="talkback_selected">%1$s selected</string>
     <string name="talkback_not_selected">%1$s not selected</string>
+
+    <!-- Address of Moscone Center. Shown together with its name. -->
+    <string name="map_venue_address" translatable="false">1 Amphitheatre Pkwy\nMountain View,\nCA 94043</string>
+
+    <!-- Button to view more Videos or sessions from the videos/sessions card view. -->
+    <string name="more_items_button">More</string>
 
     <!-- Shown in a drop-down list on the main screen, indicating that all conference themes
     are being displayed. Themes are major categories for sessions (the themes are Design,
@@ -69,6 +81,10 @@
     <!-- This is used on the Explore I/O message cards to answer no to a particular message -->
     <string name="explore_io_msgcards_answer_no">No thanks</string>
 
+    <!-- This string is presented to users when they attempt to click something that indicates they
+         can watch a video but it turns out we can't show the video. -->
+    <string name="explore_io_video_id_not_valid">Sorry, there appears to be a problem with the video url.</string>
+
     <!-- BEGIN Explore Message Card User Messages -->
     <string name="explore_io_notifications_ask_opt_in" description="This message is displayed on the Explore I/O screen to ask users whether
         they would like to opt in to receive notifications for the sessions the have added to their schedule."><![CDATA[
@@ -86,4 +102,19 @@
         <b>Conference Wi-Fi</b><br/>
         Would you like to setup this device to
         access the 5 Ghz conference Wi-Fi?]]></string>
+
+    <string name="explore_io_on_the_ground_title" description="This string is presented as a header message on a user interface card
+         element. The card element has sub-cards that explain a few logistical details for
+         attendees. 'On the Ground' is slang in English indicating 'What you need to know when
+         you're in the middle of the conference.'">On the Ground</string>
+
+    <string name="transition_track_header" translatable="false">transition_track_header</string>
+
+    <string name="transition_track_title" translatable="false">transition_track_title</string>
+
+    <string name="transition_track_background" translatable="false">transition_track_background</string>
+
+    <string name="transition_session_background" translatable="false">transition_session_background</string>
+
+    <string name="transition_session_image" translatable="false">transition_session_image</string>
 </resources>

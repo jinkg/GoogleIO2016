@@ -26,5 +26,5 @@
         android:maxLines="1"
         android:paddingLeft="@dimen/action_button_padding"
         android:textColor="@color/body_text_2"
-        android:textSize="@dimen/text_size_medium" />
+        android:textSize="@dimen/app_text_size_medium" />
 </LinearLayout>
