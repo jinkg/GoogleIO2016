@@ -38,9 +38,17 @@ android {
         buildConfigField("String", "PREF_SESSION_FEEDBACK_REMINDERS_ENABLED", "\"pref_session_feedback_reminders_enabled_${conf_version}\"")
     }
     buildTypes {
+        debug{
+            debuggable true
+            minifyEnabled false
+
+            resValue("string","website_host_name","${production_website_host_name}")
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+            resValue("string","website_host_name","${production_website_host_name}")
         }
     }
 }

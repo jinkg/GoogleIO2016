@@ -10,12 +10,16 @@
     <string name="welcome_select_account_text">Please choose an account to use:</string>
     <string name="skip">Skip</string>
 
+    <string name="navdrawer_item_my_schedule">Schedule</string>
     <string name="navdrawer_item_explore">Explore</string>
     <string name="navdrawer_item_sign_in">Sign in</string>
     <string name="navdrawer_item_debug">Debug</string>
     <string name="navdrawer_description_a11y">Navigation Menu</string>
 
     <string name="switch_account_spinner_description_a11y">Switch account</string>
+
+    <!-- Navigation bar text for viewing the user's schedule -->
+    <string name="title_my_schedule">Schedule</string>
 
     <!-- Navigation bar text for exploring the sessions -->
     <string name="title_explore">Explore</string>

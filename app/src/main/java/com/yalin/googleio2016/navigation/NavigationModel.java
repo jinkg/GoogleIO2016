@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 
 import com.yalin.googleio2016.BuildConfig;
+import com.yalin.googleio2016.MyScheduleActivity;
 import com.yalin.googleio2016.R;
 import com.yalin.googleio2016.archframework.Model;
 import com.yalin.googleio2016.archframework.QueryEnum;
@@ -108,6 +109,8 @@ public class NavigationModel implements Model<NavigationQueryEnum, NavigationUse
     }
 
     public enum NavigationItemEnum {
+        MY_SCHEDULE(R.id.myschedule_nav_item, R.string.navdrawer_item_my_schedule,
+                R.drawable.ic_navview_schedule, MyScheduleActivity.class),
         EXPLORE(R.id.explore_nav_item, R.string.navdrawer_item_explore,
                 R.drawable.ic_navview_explore, ExploreIOActivity.class, true),
         SIGN_IN(R.id.signin_nav_item, R.string.navdrawer_item_sign_in, 0, null),

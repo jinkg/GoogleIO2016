@@ -51,6 +51,8 @@
         <item name="android:windowBackground">@color/background</item>
     </style>
 
+    <style name="Theme.GoogleIO.MySchedule" parent="Theme.GoogleIO.WithNavDrawer" />
+
     <style name="ActionBarThemeOverlay" parent="ThemeOverlay.AppCompat.ActionBar">
         <item name="android:textColorPrimary">@color/text_on_primary</item>
         <item name="android:textColorSecondary">@color/subtitle_on_primary</item>

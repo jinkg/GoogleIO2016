@@ -6,10 +6,12 @@ import android.support.test.filters.LargeTest;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
+import com.yalin.googleio2016.R;
 import com.yalin.googleio2016.explore.ExploreIOActivity;
 import com.yalin.googleio2016.injection.LoginAndAuthProvider;
 import com.yalin.googleio2016.settings.SettingsUtils;
 import com.yalin.googleio2016.testutils.LoginUtils;
+import com.yalin.googleio2016.testutils.NavigationUtils;
 
 import org.junit.After;
 import org.junit.Rule;
@@ -61,11 +63,22 @@ public class BaseActivity_ActiveAccountUnsuccessfulLoginTest {
         LoginAndAuthProvider.setStubLoginAndAuth(null);
     }
 
+    /**
+     * This will fail if there is no available account on the device
+     */
     @FlakyTest
     @Test
     public void accountName_IsDisplayed_Flaky() {
-        onView(isRoot()).perform(waitText(mAccountName, TimeUnit.SECONDS.toMillis(5)));
-//        onView(withText(mAccountName)).check(matches(isDisplayed()));
+        // Given navigation menu
+        NavigationUtils.showNavigation();
+
+        // Then the account name is shown
+        onView(withText(mAccountName)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void mySchedule_IsDisplayed() {
+        NavigationUtils.checkNavigationItemIsDisplayed(R.string.navdrawer_item_my_schedule);
     }
 }
 

@@ -316,7 +316,7 @@ public class ConfMessageCardUtils {
             } else if (BuildConfig.PREF_CONF_MESSAGES_ENABLED.equals(key)) {
                 onPrefChanged(BuildConfig.PREF_CONF_MESSAGES_ENABLED,
                         sp.getBoolean(BuildConfig.PREF_CONF_MESSAGES_ENABLED, false));
-            } else {
+            } else if (isConfMessageKey(key)) {
                 onPrefChanged(key, sp.getBoolean(key, false));
             }
         }

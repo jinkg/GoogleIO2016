@@ -5,24 +5,23 @@ import android.support.test.filters.LargeTest;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
+import com.yalin.googleio2016.R;
 import com.yalin.googleio2016.explore.ExploreIOActivity;
 import com.yalin.googleio2016.injection.LoginAndAuthProvider;
 import com.yalin.googleio2016.settings.SettingsUtils;
 import com.yalin.googleio2016.testutils.LoginUtils;
+import com.yalin.googleio2016.testutils.NavigationUtils;
 
 import org.junit.After;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.util.concurrent.TimeUnit;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static android.support.test.espresso.matcher.ViewMatchers.isRoot;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static com.yalin.googleio2016.testutils.SyncUtils.waitText;
 
 /**
  * YaLin
@@ -63,7 +62,15 @@ public class BaseActivity_ActiveAccountSuccessfulLoginTest {
 
     @Test
     public void accountName_IsDisplayed() {
-        onView(isRoot()).perform(waitText(mAccountName, TimeUnit.SECONDS.toMillis(5)));
-//        onView(withText(mAccountName)).check(matches(isDisplayed()));
+        // Given navigation menu
+        NavigationUtils.showNavigation();
+
+        // Then the account name is shown
+        onView(withText(mAccountName)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void mySchedule_IsDisplayed() {
+        NavigationUtils.checkNavigationItemIsDisplayed(R.string.navdrawer_item_my_schedule);
     }
 }

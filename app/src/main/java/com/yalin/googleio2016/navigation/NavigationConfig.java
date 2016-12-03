@@ -20,20 +20,24 @@ public class NavigationConfig {
             };
 
     public final static NavigationItemEnum[] NAVIGATION_ITEMS_LOGGEDIN_ATTENDING =
-            concatenateItems(new NavigationItemEnum[]{NavigationItemEnum.EXPLORE},
+            concatenateItems(new NavigationItemEnum[]{NavigationItemEnum.MY_SCHEDULE,
+                            NavigationItemEnum.EXPLORE},
                     COMMON_ITEMS_AFTER_CUSTOM);
 
     public final static NavigationItemEnum[] NAVIGATION_ITEMS_LOGGEDIN_REMOTE =
-            concatenateItems(new NavigationItemEnum[]{NavigationItemEnum.EXPLORE},
+            concatenateItems(new NavigationItemEnum[]{NavigationItemEnum.MY_SCHEDULE,
+                            NavigationItemEnum.EXPLORE},
                     COMMON_ITEMS_AFTER_CUSTOM);
 
     public final static NavigationItemEnum[] NAVIGATION_ITEMS_LOGGEDOUT_ATTENDING =
             concatenateItems(new NavigationItemEnum[]{NavigationItemEnum.SIGN_IN,
+                            NavigationItemEnum.MY_SCHEDULE,
                             NavigationItemEnum.EXPLORE},
                     COMMON_ITEMS_AFTER_CUSTOM);
 
     public final static NavigationItemEnum[] NAVIGATION_ITEMS_LOGGEDOUT_REMOTE =
             concatenateItems(new NavigationItemEnum[]{NavigationItemEnum.SIGN_IN,
+                            NavigationItemEnum.MY_SCHEDULE,
                             NavigationItemEnum.EXPLORE},
                     COMMON_ITEMS_AFTER_CUSTOM);
 
