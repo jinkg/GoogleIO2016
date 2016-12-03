@@ -34,7 +34,7 @@
         </activity>
 
         <activity
-            android:name=".MyScheduleActivity"
+            android:name=".myschedule.MyScheduleActivity"
             android:exported="true"
             android:label="@string/title_my_schedule"
             android:launchMode="singleTop"

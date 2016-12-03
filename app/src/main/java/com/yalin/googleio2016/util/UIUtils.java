@@ -1,5 +1,6 @@
 package com.yalin.googleio2016.util;
 
+import android.annotation.TargetApi;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.res.Resources;
@@ -16,6 +17,7 @@ import android.support.annotation.NonNull;
 import android.support.graphics.drawable.VectorDrawableCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.TypedValue;
+import android.view.View;
 
 import com.yalin.googleio2016.R;
 
@@ -110,5 +112,15 @@ public class UIUtils {
         float size = att.getDimension(0, 0);
         att.recycle();
         return (int) size;
+    }
+
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
+    public static boolean isRtl(final Context context) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            return false;
+        } else {
+            return context.getResources().getConfiguration().getLayoutDirection()
+                    == View.LAYOUT_DIRECTION_RTL;
+        }
     }
 }

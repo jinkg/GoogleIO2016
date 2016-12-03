@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 
 import com.yalin.googleio2016.BuildConfig;
-import com.yalin.googleio2016.MyScheduleActivity;
+import com.yalin.googleio2016.myschedule.MyScheduleActivity;
 import com.yalin.googleio2016.R;
 import com.yalin.googleio2016.archframework.Model;
 import com.yalin.googleio2016.archframework.QueryEnum;

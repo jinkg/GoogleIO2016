@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import android.text.format.DateUtils;
 
 import com.yalin.googleio2016.BuildConfig;
+import com.yalin.googleio2016.Config;
 import com.yalin.googleio2016.settings.SettingsUtils;
 
 import java.text.DateFormat;
@@ -54,6 +55,18 @@ public class TimeUtils {
         Date d = parseTimestamp(timestamp);
         return d == null ? defaultValue : d.getTime();
     }
+
+    /**
+     * @return the name of the day at the given {@code position} in the {@link
+     * Config#CONFERENCE_DAYS}. It is assumed that all days in {@link Config#CONFERENCE_DAYS} are
+     * consecutive.
+     */
+    public static String getDayName(Context context, int position) {
+        long day1Start = Config.CONFERENCE_DAYS[0][0];
+        long day = 1000 * 60 * 60 * 24;
+        return TimeUtils.formatShortDate(context, new Date(day1Start + day * position));
+    }
+
 
     /**
      * Retrieve the current time. If the current build is a debug build, the mock time is returned

@@ -61,6 +61,8 @@
     <color name="body_text_2_inverse">#8affffff</color>
 
     <color name="more_button_background">#40707070</color>
+    <color name="grey_background">#f5f5f5</color>
+    <color name="dark_divider">#32000000</color>
 
     <color name="navdrawer_background">#ffffffff</color>
     <color name="navdrawer_text_color">@color/body_text_1</color>
@@ -68,6 +70,21 @@
     <color name="navdrawer_icon_tint">#444</color>
     <color name="navdrawer_icon_tint_selected">@color/cyan_a700_plus</color>
     <color name="navdrawer_selected_item_background">#1a000000</color>
+
+    <color name="butter_bar_light">#eee0e0e0</color>
+    <color name="tab_background">@color/theme_primary</color>
+    <color name="tab_selected_strip">@android:color/white</color>
+    <color name="unselected_tab_on_primary">#b3004446</color>
+
+    <color name="my_schedule_conflict">#dd2c00</color>
+    <color name="my_schedule_past_background">@color/grey_background</color>
+    <color name="my_schedule_past">#95a1a6</color>
+    <color name="my_schedule_hour_header_default">#de455a64</color>
+    <color name="my_schedule_hour_header_finished">#b8455a64</color>
+    <color name="my_schedule_icon_default">#ff07434d</color>
+    <color name="my_schedule_icon_finished">#ff49757c</color>
+    <color name="my_schedule_session_title_default">#de07434d</color>
+    <color name="my_schedule_session_title_finished">#b807434d</color>
 
     <color name="default_session_color">@color/theme_primary</color>
 

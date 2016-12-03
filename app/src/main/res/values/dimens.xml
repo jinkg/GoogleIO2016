@@ -52,6 +52,11 @@
     <item name="aspect_4_3" format="float" type="dimen">1.3333</item>
     <item name="aspect_phi" format="float" type="dimen">1.618</item>
 
+    <!-- body content -->
+    <dimen name="element_spacing_normal">8dp</dimen>
+    <dimen name="content_padding_normal">16dp</dimen>
+    <dimen name="content_padding_dialog">24dp</dimen>
+
     <dimen name="app_text_size_xsmall">11sp</dimen>
     <dimen name="app_text_size_small">12sp</dimen>
     <dimen name="app_text_size_body">13sp</dimen>
@@ -69,4 +74,6 @@
 
     <dimen name="explore_topic_card_header_height">112dp</dimen>
     <dimen name="compact_list_tile">168dp</dimen>
+
+    <dimen name="butter_bar_height">64dp</dimen>
 </resources>
