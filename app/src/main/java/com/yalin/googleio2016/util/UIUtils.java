@@ -16,10 +16,15 @@ import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.support.graphics.drawable.VectorDrawableCompat;
 import android.support.v4.content.ContextCompat;
+import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.View;
 
+import com.yalin.googleio2016.Config;
 import com.yalin.googleio2016.R;
+import com.yalin.googleio2016.model.ScheduleItem;
+import com.yalin.googleio2016.provider.ScheduleContract;
+import com.yalin.googleio2016.settings.SettingsUtils;
 
 /**
  * YaLin
@@ -32,6 +37,29 @@ public class UIUtils {
     public static final String MOCK_DATA_PREFERENCES = "mock_data";
     public static final String PREFS_MOCK_CURRENT_TIME = "mock_current_time";
     public static final String PREFS_MOCK_APP_START_TIME = "mock_app_start_time";
+
+    /**
+     * Format and return the given session speakers and {@link ScheduleContract.Rooms} values.
+     */
+    public static String formatSessionSubtitle(String roomName, String speakerNames,
+                                               Context context) {
+
+        // Determine if the session is in the past
+        if (roomName == null) {
+            roomName = context.getString(R.string.unknown_room);
+        }
+
+        if (!TextUtils.isEmpty(speakerNames)) {
+            return speakerNames + "\n" + roomName;
+        } else {
+            return roomName;
+        }
+    }
+
+    public static boolean shouldShowLiveSessionsOnly(final Context context) {
+        return !SettingsUtils.isAttendeeAtVenue(context)
+                && TimeUtils.getCurrentTime(context) < Config.CONFERENCE_END_MILLIS;
+    }
 
     /**
      * Queries the theme of the given {@code context} for a theme color.
@@ -122,5 +150,45 @@ public class UIUtils {
             return context.getResources().getConfiguration().getLayoutDirection()
                     == View.LAYOUT_DIRECTION_RTL;
         }
+    }
+
+    public static
+    @DrawableRes
+    int getSessionIcon(int sessionType) {
+        switch (sessionType) {
+            case ScheduleItem.SESSION_TYPE_SESSION:
+                return R.drawable.ic_session;
+            case ScheduleItem.SESSION_TYPE_CODELAB:
+                return R.drawable.ic_codelab;
+            case ScheduleItem.SESSION_TYPE_BOXTALK:
+                return R.drawable.ic_sandbox;
+            case ScheduleItem.SESSION_TYPE_MISC:
+            default:
+                return R.drawable.ic_misc;
+        }
+    }
+
+    // TODO: Improve the mapping of icons to breaks.
+    // Initially this was a convenience method and there were few icons to be assigned to
+    // breaks. The current implementation could be improved if the icon - break mapping
+    // was defined via a configuration file and loaded at runtime. This would make the breaks
+    // more flexible.
+    public static
+    @DrawableRes
+    int getBreakIcon(String breakTitle) {
+        if (!TextUtils.isEmpty(breakTitle)) {
+            if (breakTitle.contains("After") || breakTitle.contains("Concert")) {
+                return R.drawable.ic_after_hours;
+            } else if (breakTitle.contains("Badge")) {
+                return R.drawable.ic_badge_pickup;
+            } else if (breakTitle.contains("Pre-Keynote")) {
+                return R.drawable.ic_session;
+            } else if (breakTitle.contains("Codelabs")) {
+                return R.drawable.ic_codelab;
+            } else if (breakTitle.contains("Sandbox") || breakTitle.contains("Office hours")) {
+                return R.drawable.ic_sandbox;
+            }
+        }
+        return R.drawable.ic_food;
     }
 }

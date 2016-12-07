@@ -48,6 +48,11 @@
     <dimen name="explore_io_theme_cards_session_image_width">112dp</dimen>
     <dimen name="explore_io_theme_illo_height">48dp</dimen>
 
+    <dimen name="my_schedule_icon_size">24dp</dimen>
+    <dimen name="my_schedule_icon_horizontal_padding">24dp</dimen>
+
+    <dimen name="my_schedule_page_margin">@dimen/padding_normal</dimen>
+
     <item name="aspect_16_9" format="float" type="dimen">1.7778</item>
     <item name="aspect_4_3" format="float" type="dimen">1.3333</item>
     <item name="aspect_phi" format="float" type="dimen">1.618</item>

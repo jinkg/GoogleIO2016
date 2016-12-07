@@ -14,6 +14,9 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
+import com.yalin.googleio2016.Config;
+import com.yalin.googleio2016.provider.ScheduleContract.Blocks;
+import com.yalin.googleio2016.provider.ScheduleContract.Feedback;
 import com.yalin.googleio2016.provider.ScheduleContract.Sessions;
 import com.yalin.googleio2016.provider.ScheduleContract.Speakers;
 import com.yalin.googleio2016.provider.ScheduleContract.Tags;
@@ -210,6 +213,9 @@ public class ScheduleProvider extends ContentProvider {
         }
 
         switch (matchingUriEnum) {
+            case BLOCKS: {
+                return Blocks.buildBlockUri(values.getAsString(Blocks.BLOCK_ID));
+            }
             case CARDS: {
                 return ScheduleContract.Cards.buildCardUri(values.getAsString(
                         ScheduleContract.Cards.CARD_ID));
@@ -266,6 +272,7 @@ public class ScheduleProvider extends ContentProvider {
         // The main Uris, corresponding to the root of each type of Uri, do not have any selection
         // criteria so the full table is used. The others apply a selection criteria.
         switch (matchingUriEnum) {
+            case BLOCKS:
             case CARDS:
             case TAGS:
             case SESSIONS:
@@ -285,6 +292,11 @@ public class ScheduleProvider extends ContentProvider {
                 return builder.table(Tables.SESSIONS_TAGS)
                         .where(Sessions.SESSION_ID + "=?", sessionId);
             }
+            case SESSIONS_MY_SCHEDULE: {
+                final String sessionId = Sessions.getSessionId(uri);
+                return builder.table(Tables.MY_SCHEDULE)
+                        .where(ScheduleContract.MyScheduleColumns.SESSION_ID + "=?", sessionId);
+            }
             default: {
                 throw new UnsupportedOperationException("Unknown uri for " + uri);
             }
@@ -303,6 +315,9 @@ public class ScheduleProvider extends ContentProvider {
             throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
         switch (matchingUriEnum) {
+            case BLOCKS: {
+                return builder.table(Tables.BLOCKS);
+            }
             case CARDS: {
                 return builder.table(Tables.CARDS);
             }
@@ -319,6 +334,19 @@ public class ScheduleProvider extends ContentProvider {
                         .mapToTable(Sessions.ROOM_ID, Tables.SESSIONS)
                         .mapToTable(Sessions.SESSION_ID, Tables.SESSIONS)
                         .map(Sessions.SESSION_IN_MY_SCHEDULE, "IFNULL(in_schedule,0)")
+                        .groupBy(Qualified.SESSIONS_SESSION_ID);
+            }
+            case SESSIONS_MY_SCHEDULE: {
+                return builder.table(Tables.SESSIONS_JOIN_ROOMS_TAGS_FEEDBACK_MYSCHEDULE,
+                        getCurrentAccountName(uri, true))
+                        .mapToTable(Sessions._ID, Tables.SESSIONS)
+                        .mapToTable(Sessions.ROOM_ID, Tables.SESSIONS)
+                        .mapToTable(Sessions.SESSION_ID, Tables.SESSIONS)
+                        .map(Sessions.HAS_GIVEN_FEEDBACK, Subquery.SESSION_HAS_GIVEN_FEEDBACK)
+                        .map(Sessions.SESSION_IN_MY_SCHEDULE, "IFNULL(in_schedule, 0)")
+                        .where("( " + Sessions.SESSION_IN_MY_SCHEDULE + "=1 OR " +
+                                Sessions.SESSION_TAGS +
+                                " LIKE '%" + Config.Tags.SPECIAL_KEYNOTE + "%' )")
                         .groupBy(Qualified.SESSIONS_SESSION_ID);
             }
             case SESSIONS_ID: {
@@ -403,6 +431,14 @@ public class ScheduleProvider extends ContentProvider {
         return accountName;
     }
 
+    private interface Subquery {
+        String SESSION_HAS_GIVEN_FEEDBACK = "(SELECT COUNT(1) FROM "
+                + Tables.FEEDBACK + " WHERE " + Qualified.FEEDBACK_SESSION_ID + "="
+                + Qualified.SESSIONS_SESSION_ID + ")";
+
+        String SESSIONS_SNIPPET = "snippet(" + Tables.SESSIONS_SEARCH + ",'{','}','\u2026')";
+    }
+
     /**
      * {@link ScheduleContract} fields that are fully qualified with a specific
      * parent {@link Tables}. Used when needed to work around SQL ambiguity.
@@ -419,5 +455,6 @@ public class ScheduleProvider extends ContentProvider {
         String SESSIONS_SPEAKERS_SPEAKER_ID = Tables.SESSIONS_SPEAKERS + "."
                 + SessionsSpeakers.SPEAKER_ID;
 
+        String FEEDBACK_SESSION_ID = Tables.FEEDBACK + "." + Feedback.SESSION_ID;
     }
 }

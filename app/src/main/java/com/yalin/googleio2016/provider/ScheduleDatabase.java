@@ -5,7 +5,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
 
+import com.yalin.googleio2016.provider.ScheduleContract.BlocksColumns;
 import com.yalin.googleio2016.provider.ScheduleContract.Cards;
+import com.yalin.googleio2016.provider.ScheduleContract.FeedbackColumns;
 import com.yalin.googleio2016.provider.ScheduleContract.MySchedule;
 import com.yalin.googleio2016.provider.ScheduleContract.Rooms;
 import com.yalin.googleio2016.provider.ScheduleContract.RoomsColumns;
@@ -34,9 +36,11 @@ public class ScheduleDatabase extends SQLiteOpenHelper {
     private static final int VER_2016_11_30 = 1; // app version 1.0
     private static final int VER_2016_11_30B = 2;
     private static final int VER_2016_11_30C = 3;
-    private static final int CUR_DATABASE_VERSION = VER_2016_11_30C;
+    private static final int VER_2016_12_07 = 4;
+    private static final int CUR_DATABASE_VERSION = VER_2016_12_07;
 
     interface Tables {
+        String BLOCKS = "blocks";
         String CARDS = "cards";
         String TAGS = "tags";
         String ROOMS = "rooms";
@@ -48,11 +52,20 @@ public class ScheduleDatabase extends SQLiteOpenHelper {
 
         String FEEDBACK = "feedback";
 
+        String SESSIONS_SEARCH = "sessions_search";
+
         String SESSIONS_JOIN_ROOMS_TAGS = "sessions "
                 + "LEFT OUTER JOIN myschedule ON sessions.session_id=myschedule.session_id "
                 + "AND myschedule.account_name=? "
                 + "LEFT OUTER JOIN rooms ON sessions.room_id=rooms.room_id "
                 + "LEFT OUTER JOIN sessions_tags ON sessions.session_id=sessions_tags.session_id";
+
+        String SESSIONS_JOIN_ROOMS_TAGS_FEEDBACK_MYSCHEDULE = "sessions "
+                + "LEFT OUTER JOIN myschedule ON sessions.session_id=myschedule.session_id "
+                + "AND myschedule.account_name=? "
+                + "LEFT OUTER JOIN rooms ON sessions.room_id=rooms.room_id "
+                + "LEFT OUTER JOIN sessions_tags ON sessions.session_id=sessions_tags.session_id "
+                + "LEFT OUTER JOIN feedback ON sessions.session_id=feedback.session_id";
 
         String SESSIONS_JOIN_ROOMS = "sessions "
                 + "LEFT OUTER JOIN myschedule ON sessions.session_id=myschedule.session_id "
@@ -166,6 +179,7 @@ public class ScheduleDatabase extends SQLiteOpenHelper {
 
         upgradeFrom30to30B(db);
         upgradeFrom30Bto30C(db);
+        upgradeFrom30Cto07(db);
     }
 
     @Override
@@ -188,9 +202,16 @@ public class ScheduleDatabase extends SQLiteOpenHelper {
             version = VER_2016_11_30C;
         }
 
+        if (version == VER_2016_11_30C) {
+            LogUtil.d(TAG, "Upgrading database from 30C to 07.");
+            upgradeFrom30Cto07(db);
+            version = VER_2016_12_07;
+        }
+
         if (version != CUR_DATABASE_VERSION) {
             LogUtil.w(TAG, "Upgrade unsuccessful -- destroying old data during upgrade");
 
+            db.execSQL("DROP TABLE IF EXISTS " + Tables.BLOCKS);
             db.execSQL("DROP TABLE IF EXISTS " + Tables.CARDS);
             db.execSQL("DROP TABLE IF EXISTS " + Tables.TAGS);
             db.execSQL("DROP TABLE IF EXISTS " + Tables.ROOMS);
@@ -227,6 +248,29 @@ public class ScheduleDatabase extends SQLiteOpenHelper {
                 + Cards.ACTION_TYPE + " TEXT,  "
                 + Cards.ACTION_EXTRA + " TEXT, "
                 + "UNIQUE (" + Cards.CARD_ID + ") ON CONFLICT REPLACE)");
+    }
+
+    private void upgradeFrom30Cto07(SQLiteDatabase db) {
+        db.execSQL("CREATE TABLE " + Tables.BLOCKS + " ("
+                + BaseColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + BlocksColumns.BLOCK_ID + " TEXT NOT NULL,"
+                + BlocksColumns.BLOCK_TITLE + " TEXT NOT NULL,"
+                + BlocksColumns.BLOCK_START + " INTEGER NOT NULL,"
+                + BlocksColumns.BLOCK_END + " INTEGER NOT NULL,"
+                + BlocksColumns.BLOCK_TYPE + " TEXT,"
+                + BlocksColumns.BLOCK_SUBTITLE + " TEXT,"
+                + "UNIQUE (" + BlocksColumns.BLOCK_ID + ") ON CONFLICT REPLACE)");
+
+        db.execSQL("CREATE TABLE " + Tables.FEEDBACK + " ("
+                + BaseColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + SyncColumns.UPDATED + " INTEGER NOT NULL,"
+                + Sessions.SESSION_ID + " TEXT " + References.SESSION_ID + ","
+                + FeedbackColumns.SESSION_RATING + " INTEGER NOT NULL,"
+                + FeedbackColumns.ANSWER_RELEVANCE + " INTEGER NOT NULL,"
+                + FeedbackColumns.ANSWER_CONTENT + " INTEGER NOT NULL,"
+                + FeedbackColumns.ANSWER_SPEAKER + " INTEGER NOT NULL,"
+                + FeedbackColumns.COMMENTS + " TEXT,"
+                + FeedbackColumns.SYNCED + " INTEGER NOT NULL DEFAULT 0)");
     }
 
     public static void deleteDatabase(Context context) {

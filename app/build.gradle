@@ -23,6 +23,8 @@ android {
         buildConfigField("String", "PREF_DATA_BOOTSTRAP_DONE", "\"pref_bootstrap_done_${conf_version}\"")
         buildConfigField("String", "WIFI_SSID", "\"${wifi_ssid}\"")
         buildConfigField("String", "WIFI_PASSPHRASE", "\"${wifi_passphrase}\"")
+        buildConfigField("String", "PRECONFERENCE_DAY_START", "\"${preconference_day_start}\"")
+        buildConfigField("String", "PRECONFERENCE_DAY_END", "\"${preconference_day_end}\"")
         buildConfigField("String", "CONFERENCE_DAY1_START", "\"${conference_day1_start}\"")
         buildConfigField("String", "CONFERENCE_DAY1_END", "\"${conference_day1_end}\"")
         buildConfigField("String", "CONFERENCE_DAY2_START", "\"${conference_day2_start}\"")

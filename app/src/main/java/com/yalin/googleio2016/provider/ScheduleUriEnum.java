@@ -16,9 +16,11 @@ package com.yalin.googleio2016.provider;
  * segment.
  */
 public enum ScheduleUriEnum {
+    BLOCKS(100, "blocks", ScheduleContract.Blocks.CONTENT_TYPE_ID, false, ScheduleDatabase.Tables.BLOCKS),
     TAGS(200, "tags", ScheduleContract.Tags.CONTENT_TYPE_ID, false, ScheduleDatabase.Tables.TAGS),
     SESSIONS(400, "sessions", ScheduleContract.Sessions.CONTENT_TYPE_ID, false,
             ScheduleDatabase.Tables.SESSIONS),
+    SESSIONS_MY_SCHEDULE(401, "sessions/my_schedule", ScheduleContract.Sessions.CONTENT_TYPE_ID, false, null),
     SESSIONS_ID(405, "sessions/*", ScheduleContract.Sessions.CONTENT_TYPE_ID, true, null),
     SESSIONS_ID_SPEAKERS(406, "sessions/*/speakers", ScheduleContract.Speakers.CONTENT_TYPE_ID, false,
             ScheduleDatabase.Tables.SESSIONS_SPEAKERS),

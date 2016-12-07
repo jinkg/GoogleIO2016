@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="app_name">GoogleIO2016</string>
     <string name="decline">Decline</string>
     <string name="accept">Accept</string>
@@ -17,6 +17,11 @@
     <string name="navdrawer_description_a11y">Navigation Menu</string>
 
     <string name="switch_account_spinner_description_a11y">Switch account</string>
+
+    <plurals name="schedule_block_subtitle" description="Shown in the schedule to indicate how many sessions are available on that particular time slot.">
+        <item quantity="one"><xliff:g id="number_of_sessions">%1$d</xliff:g> available session</item>
+        <item quantity="other"><xliff:g id="number_of_sessions">%1$d</xliff:g> available sessions</item>
+    </plurals>
 
     <!-- Navigation bar text for viewing the user's schedule -->
     <string name="title_my_schedule">Schedule</string>
@@ -38,6 +43,13 @@
     <!-- Button to view more Videos or sessions from the videos/sessions card view. -->
     <string name="more_items_button">More</string>
 
+    <!-- Label on a button that allows the user to see what conference sessions are available
+    at a particular time. -->
+    <string name="browse_sessions">BROWSE SESSIONS</string>
+
+    <!-- Label for the button to rate a session -->
+    <string name="my_schedule_rate_this_session">RATE THIS SESSION</string>
+
     <!-- Shown in a drop-down list on the main screen, indicating that all conference themes
     are being displayed. Themes are major categories for sessions (the themes are Design,
     Develop and Distribute). -->
@@ -54,6 +66,22 @@
    explore cards. [CHAR_LIMIT=10] -->
     <string name="live_now">LIVE NOW</string>
 
+    <!-- Menu item that allows user to reload the data in the current screen so they see
+   the most up-to-date version from the server. -->
+    <string name="description_refresh">Refresh data</string>
+
+    <!-- Text for the title of an extra schedule item on the pre conference day -->
+    <string name="my_schedule_badgepickup">Badge Pick-Up</string>
+
+    <!-- Text for the description of an extra schedule item on the pre conference day -->
+    <string name="my_schedule_badgepickup_description">Registration Desk</string>
+
+    <!-- Accessibility description for tab that shows the attendee's schedule for a given day. -->
+    <string name="my_schedule_tab_desc_a11y">Tap to show your schedule for <xliff:g id="day">%1$s</xliff:g>.</string>
+
+    <!-- Accessibility description for buttons -->
+    <string name="a11y_button">%s button</string>
+
     <string name="session_feedback_tell_us" description="Hint for adding other session feedback">Other session feedback?</string>
 
     <!-- Shown in a drop-down list on the main screen, indicating that all session types
@@ -68,6 +96,9 @@
 
     <!-- Label for exploration category which groups session types -->
     <string name="types">Types</string>
+
+    <!-- Text for a session subtitle indicating it does not have a room specified -->
+    <string name="unknown_room">(Unspecified Room)</string>
 
     <!-- A single button shown on informative popups, like EULA, open source licenses and About -->
     <string name="ok">OK</string>

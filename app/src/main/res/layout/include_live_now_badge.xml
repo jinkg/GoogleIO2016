@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/live_now_badge"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@color/theme_primary"
+    android:drawableLeft="@drawable/ic_live_now"
+    android:drawablePadding="4dp"
+    android:gravity="center"
+    android:paddingBottom="4dp"
+    android:paddingLeft="6dp"
+    android:paddingRight="16dp"
+    android:paddingTop="4dp"
+    android:text="@string/live_now"
+    android:textAppearance="@style/LiveNowIndicator"
+    android:visibility="visible"
+    tools:showIn="@layout/widget_schedule_item_now" />

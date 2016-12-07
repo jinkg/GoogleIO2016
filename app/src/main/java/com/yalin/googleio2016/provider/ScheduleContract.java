@@ -2,6 +2,9 @@ package com.yalin.googleio2016.provider;
 
 import android.net.Uri;
 import android.provider.BaseColumns;
+import android.text.format.DateUtils;
+
+import com.yalin.googleio2016.util.ParserUtils;
 
 /**
  * YaLin
@@ -27,6 +30,34 @@ public final class ScheduleContract {
 
     public interface SyncColumns {
         String UPDATED = "updated";
+    }
+
+    interface BlocksColumns {
+
+        /**
+         * Unique string identifying this block of time.
+         */
+        String BLOCK_ID = "block_id";
+        /**
+         * Title describing this block of time.
+         */
+        String BLOCK_TITLE = "block_title";
+        /**
+         * Time when this block starts.
+         */
+        String BLOCK_START = "block_start";
+        /**
+         * Time when this block ends.
+         */
+        String BLOCK_END = "block_end";
+        /**
+         * Type describing this block.
+         */
+        String BLOCK_TYPE = "block_type";
+        /**
+         * Extra subtitle for the block.
+         */
+        String BLOCK_SUBTITLE = "block_subtitle";
     }
 
     interface TagsColumns {
@@ -307,6 +338,15 @@ public final class ScheduleContract {
         String ACTION_EXTRA = "action_extra";
     }
 
+    interface FeedbackColumns {
+        String SESSION_ID = "session_id";
+        String SESSION_RATING = "feedback_session_rating";
+        String ANSWER_RELEVANCE = "feedback_answer_q1";
+        String ANSWER_CONTENT = "feedback_answer_q2";
+        String ANSWER_SPEAKER = "feedback_answer_q3";
+        String COMMENTS = "feedback_comments";
+        String SYNCED = "synced";
+    }
 
     public static final String CONTENT_AUTHORITY = "com.yalin.googleio2016";
 
@@ -396,6 +436,48 @@ public final class ScheduleContract {
     }
 
     /**
+     * Blocks are generic timeslots.
+     */
+    public static class Blocks implements BlocksColumns, BaseColumns {
+
+        public static final String BLOCK_TYPE_FREE = "free";
+
+        public static final String BLOCK_TYPE_BREAK = "break";
+
+        public static final String BLOCK_TYPE_KEYNOTE = "keynote";
+
+        public static boolean isValidBlockType(String type) {
+            return BLOCK_TYPE_FREE.equals(type) || BLOCK_TYPE_BREAK.equals(type)
+                    || BLOCK_TYPE_KEYNOTE.equals(type);
+        }
+
+        public static final Uri CONTENT_URI =
+                BASE_CONTENT_URI.buildUpon().appendPath(PATH_BLOCKS).build();
+
+        public static final String CONTENT_TYPE_ID = "block";
+
+        /**
+         * Build {@link Uri} for requested {@link #BLOCK_ID}.
+         */
+        public static Uri buildBlockUri(String blockId) {
+            return CONTENT_URI.buildUpon().appendPath(blockId).build();
+        }
+
+        /**
+         * Generate a {@link #BLOCK_ID} that will always match the requested
+         * {@link Blocks} details.
+         *
+         * @param startTime the block start time, in milliseconds since Epoch UTC
+         * @param endTime   the block end time, in milliseconds since Epoch UTF
+         */
+        public static String generateBlockId(long startTime, long endTime) {
+            startTime /= DateUtils.SECOND_IN_MILLIS;
+            endTime /= DateUtils.SECOND_IN_MILLIS;
+            return ParserUtils.sanitizeId(startTime + "-" + endTime);
+        }
+    }
+
+    /**
      * Each session has zero or more {@link Tags}, a {@link Rooms},
      * zero or more {@link Speakers}.
      */
@@ -417,10 +499,14 @@ public final class ScheduleContract {
 
         public static final String SEARCH_SNIPPET = "search_snippet";
 
-        public static final String HAS_GIVE_FEEDBACK = "has_give_feedback";
+        public static final String HAS_GIVEN_FEEDBACK = "has_given_feedback";
 
         public static final String SORT_BY_TYPE_THEN_TIME = SESSION_GROUPING_ORDER + " ASC,"
                 + SESSION_START + " ASC," + SESSION_TITLE + " COLLATE NOCASE ASC";
+
+        // Used to fetch sessions starting within a specific time interval
+        public static final String STARTING_AT_TIME_INTERVAL_SELECTION =
+                SESSION_START + " >= ? and " + SESSION_START + " <= ?";
 
         /**
          * Build {@link Uri} for requested {@link #SESSION_ID}.
@@ -458,6 +544,23 @@ public final class ScheduleContract {
          */
         public static String getSessionId(Uri uri) {
             return uri.getPathSegments().get(1);
+        }
+
+        /**
+         * Build {@link Uri} that counts sessions by start/end intervals.
+         */
+        public static Uri buildCounterByIntervalUri() {
+            return CONTENT_URI.buildUpon().appendPath(PATH_SESSIONS_COUNTER).build();
+        }
+
+        /**
+         * Build {@link Uri} that references sessions not in user's schedule that happen in the
+         * specified interval *
+         */
+        public static Uri buildUnscheduledSessionsInInterval(long start, long end) {
+            String interval = start + "-" + end;
+            return CONTENT_URI.buildUpon().appendPath(PATH_UNSCHEDULED).appendPath(interval)
+                    .build();
         }
     }
 
@@ -556,6 +659,28 @@ public final class ScheduleContract {
          * Read {@link #ROOM_ID} from {@link Rooms} {@link Uri}.
          */
         public static String getRoomId(Uri uri) {
+            return uri.getPathSegments().get(1);
+        }
+    }
+
+    public static class Feedback implements BaseColumns, FeedbackColumns, SyncColumns {
+
+        public static final Uri CONTENT_URI =
+                BASE_CONTENT_URI.buildUpon().appendPath(PATH_FEEDBACK).build();
+
+        public static final String CONTENT_TYPE_ID = "session_feedback";
+
+        /**
+         * Build {@link Uri} to feedback for given session.
+         */
+        public static Uri buildFeedbackUri(String sessionId) {
+            return CONTENT_URI.buildUpon().appendPath(sessionId).build();
+        }
+
+        /**
+         * Read {@link #SESSION_ID} from {@link Feedback} {@link Uri}.
+         */
+        public static String getSessionId(Uri uri) {
             return uri.getPathSegments().get(1);
         }
     }

@@ -50,6 +50,7 @@ public class ConferenceDataHandler {
     // really old or nonexistent)
     private static final String DEFAULT_TIMESTAMP = "Sat, 1 Jan 2000 00:00:00 GMT";
 
+    private static final String DATA_KEY_BLOCKS = "blocks";
     private static final String DATA_KEY_TAGS = "tags";
     private static final String DATA_KEY_SPEAKERS = "speakers";
     private static final String DATA_KEY_SESSIONS = "sessions";
@@ -62,6 +63,7 @@ public class ConferenceDataHandler {
 
     Context mContext = null;
 
+    BlocksHandler mBlocksHandler = null;
     TagsHandler mTagsHandler = null;
     SpeakersHandler mSpeakersHandler = null;
     SessionsHandler mSessionsHandler = null;
@@ -91,6 +93,7 @@ public class ConferenceDataHandler {
         LogUtil.d(TAG, "Applying data from " + dataBodies.length +
                 " files, timestamp " + dataTimestamp);
 
+        mHandlerForKey.put(DATA_KEY_BLOCKS, mBlocksHandler = new BlocksHandler(mContext));
         mHandlerForKey.put(DATA_KEY_TAGS, mTagsHandler = new TagsHandler(mContext));
         mHandlerForKey.put(DATA_KEY_SPEAKERS, mSpeakersHandler = new SpeakersHandler(mContext));
         mHandlerForKey.put(DATA_KEY_SESSIONS, mSessionsHandler = new SessionsHandler(mContext));

@@ -22,6 +22,11 @@ import java.util.TimeZone;
  */
 
 public class TimeUtils {
+    public static final int SECOND = 1000;
+    public static final int MINUTE = 60 * SECOND;
+    public static final int HOUR = 60 * MINUTE;
+    public static final int DAY = 24 * HOUR;
+
     private static final SimpleDateFormat[] ACCEPTED_TIMESTAMP_FORMATS = {
             new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss Z", Locale.US),
             new SimpleDateFormat("EEE MMM dd HH:mm:ss yyyy", Locale.US),

@@ -15,7 +15,6 @@
         android:layout_gravity="center_vertical"
         android:layout_weight="1"
         android:padding="16dp"
-        android:singleLine="false"
         android:textColor="@color/body_text_2" />
 
     <Button

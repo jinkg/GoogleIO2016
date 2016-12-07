@@ -217,8 +217,8 @@ public abstract class ModelWithLoaderManager<Q extends QueryEnum, UA extends Use
     @VisibleForTesting
     public void onLoadFinished(Q query, Cursor data) {
         boolean success = readDataFromCursor(data, query);
-        if (mDataUpdateCallbacks.indexOfKey(query.getId()) > 0
-                && mUserActionsLaunchingQueries.indexOfKey(query.getId()) > 0) {
+        if (mDataUpdateCallbacks.indexOfKey(query.getId()) >= 0
+                && mUserActionsLaunchingQueries.indexOfKey(query.getId()) >= 0) {
             UserActionCallback callback = mDataUpdateCallbacks.get(query.getId());
             UA userAction = mUserActionsLaunchingQueries.get(query.getId());
             if (success) {
