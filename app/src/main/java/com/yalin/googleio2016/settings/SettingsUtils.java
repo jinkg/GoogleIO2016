@@ -7,6 +7,7 @@ import android.preference.PreferenceManager;
 import com.yalin.googleio2016.BuildConfig;
 import com.yalin.googleio2016.Config;
 import com.yalin.googleio2016.ui.BaseActivity;
+import com.yalin.googleio2016.util.TimeUtils;
 import com.yalin.googleio2016.welcome.WelcomeActivity;
 
 import java.util.TimeZone;
@@ -226,5 +227,36 @@ public class SettingsUtils {
     public static void markDeclinedWifiSetup(final Context context, boolean newValue) {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
         sp.edit().putBoolean(PREF_DECLINED_WIFI_SETUP, newValue).apply();
+    }
+
+    /**
+     * Mark a sync was attempted (stores current time as 'last sync attempted' preference).
+     *
+     * @param context Context to be used to edit the {@link android.content.SharedPreferences}.
+     */
+    public static void markSyncAttemptedNow(final Context context) {
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+        sp.edit().putLong(PREF_LAST_SYNC_ATTEMPTED, TimeUtils.getCurrentTime(context)).apply();
+    }
+
+    /**
+     * Mark that a sync succeeded (stores current time as 'last sync succeeded' preference).
+     *
+     * @param context Context to be used to edit the {@link android.content.SharedPreferences}.
+     */
+    public static void markSyncSucceededNow(final Context context) {
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+        sp.edit().putLong(PREF_LAST_SYNC_SUCCEEDED, TimeUtils.getCurrentTime(context)).apply();
+    }
+
+    /**
+     * Set a new interval for the data sync time.
+     *
+     * @param context  Context to be used to edit the {@link android.content.SharedPreferences}.
+     * @param newValue New value that will be set.
+     */
+    public static void setCurSyncInterval(final Context context, long newValue) {
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+        sp.edit().putLong(PREF_CUR_SYNC_INTERVAL, newValue).apply();
     }
 }

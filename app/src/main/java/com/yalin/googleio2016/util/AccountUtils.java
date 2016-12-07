@@ -6,7 +6,13 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
 
+import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.GoogleAuthUtil;
+import com.google.android.gms.auth.UserRecoverableNotifiedException;
+import com.google.android.gms.common.Scopes;
+import com.yalin.googleio2016.provider.ScheduleContract;
+
+import java.io.IOException;
 
 /**
  * YaLin
@@ -23,6 +29,23 @@ public class AccountUtils {
     private static final String PREFIX_PREF_PLUS_NAME = "plus_name_";
     private static final String PREFIX_PREF_PLUS_IMAGE_URL = "plus_image_url_";
     private static final String PREFIX_PREF_PLUS_COVER_URL = "plus_cover_url_";
+
+    public static final String AUTH_SCOPES[] = {
+            Scopes.PLUS_LOGIN,
+            Scopes.DRIVE_APPFOLDER,
+            "https://www.googleapis.com/auth/userinfo.email"};
+
+    static final String AUTH_TOKEN_TYPE;
+
+    static {
+        StringBuilder sb = new StringBuilder();
+        sb.append("oauth2:");
+        for (String scope : AUTH_SCOPES) {
+            sb.append(scope);
+            sb.append(" ");
+        }
+        AUTH_TOKEN_TYPE = sb.toString();
+    }
 
     private static SharedPreferences getSharedPreferences(final Context context) {
         return PreferenceManager.getDefaultSharedPreferences(context);
@@ -79,6 +102,34 @@ public class AccountUtils {
         sp.edit().remove(PREF_ACTIVE_ACCOUNT).apply();
     }
 
+    public static void setAuthToken(final Context context, final String accountName, final String authToken) {
+        LogUtil.d(TAG, "Auth token of length "
+                + (TextUtils.isEmpty(authToken) ? 0 : authToken.length()) + " for "
+                + accountName);
+        SharedPreferences sp = getSharedPreferences(context);
+        sp.edit().putString(makeAccountSpecificPrefKey(accountName, PREFIX_PREF_AUTH_TOKEN),
+                authToken).apply();
+        LogUtil.d(TAG, "Auth Token: " + authToken);
+    }
+
+    public static void setAuthToken(final Context context, final String authToken) {
+        if (hasActiveAccount(context)) {
+            setAuthToken(context, getActiveAccountName(context), authToken);
+        } else {
+            LogUtil.e(TAG, "Can't set auth token because there is no chosen account!");
+        }
+    }
+
+    static void invalidateAuthToken(final Context context) {
+        setAuthToken(context, null);
+    }
+
+    public static boolean hasToken(final Context context, final String accountName) {
+        SharedPreferences sp = getSharedPreferences(context);
+        return !TextUtils.isEmpty(sp.getString(makeAccountSpecificPrefKey(accountName,
+                PREFIX_PREF_AUTH_TOKEN), null));
+    }
+
     public static String getPlusName(final Context context) {
         SharedPreferences sp = getSharedPreferences(context);
         return hasActiveAccount(context) ? sp.getString(makeAccountSpecificPrefKey(context,
@@ -97,9 +148,39 @@ public class AccountUtils {
                 PREFIX_PREF_PLUS_IMAGE_URL), null) : null;
     }
 
+    public static void refreshAuthToken(Context mContext) {
+        invalidateAuthToken(mContext);
+        tryAuthenticateWithErrorNotification(mContext, ScheduleContract.CONTENT_AUTHORITY);
+    }
+
     public static String getPlusCoverUrl(final Context context) {
         SharedPreferences sp = getSharedPreferences(context);
         return hasActiveAccount(context) ? sp.getString(makeAccountSpecificPrefKey(context,
                 PREFIX_PREF_PLUS_COVER_URL), null) : null;
     }
+
+    static void tryAuthenticateWithErrorNotification(Context context, String syncAuthority) {
+        try {
+            String accountName = getActiveAccountName(context);
+            if (accountName != null) {
+                LogUtil.d(TAG, "Requesting new auth token (with notification)");
+                final String token = GoogleAuthUtil.getTokenWithNotification(context, accountName, AUTH_TOKEN_TYPE,
+                        null, syncAuthority, null);
+                setAuthToken(context, token);
+            } else {
+                LogUtil.e(TAG, "Can't try authentication because no account is chosen.");
+            }
+
+        } catch (UserRecoverableNotifiedException e) {
+            // Notification has already been pushed.
+            LogUtil.w(TAG, "User recoverable exception. Check notification.", e);
+        } catch (GoogleAuthException e) {
+            // This is likely unrecoverable.
+            LogUtil.e(TAG, "Unrecoverable authentication exception: " + e.getMessage(), e);
+        } catch (IOException e) {
+            LogUtil.e(TAG, "transient error encountered: " + e.getMessage());
+        }
+    }
+
+
 }

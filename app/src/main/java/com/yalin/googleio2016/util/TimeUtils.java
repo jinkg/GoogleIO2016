@@ -38,6 +38,9 @@ public class TimeUtils {
             new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss Z", Locale.US)
     };
 
+    private static final SimpleDateFormat VALID_IFMODIFIEDSINCE_FORMAT =
+            new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss Z", Locale.US);
+
     public static Date parseTimestamp(String timestamp) {
         for (SimpleDateFormat format : ACCEPTED_TIMESTAMP_FORMATS) {
             // TODO: We shouldn't be forcing the time zone when parsing dates.
@@ -51,6 +54,14 @@ public class TimeUtils {
 
         // All attempts to parse have failed
         return null;
+    }
+
+    public static boolean isValidFormatForIfModifiedSinceHeader(String timestamp) {
+        try {
+            return VALID_IFMODIFIEDSINCE_FORMAT.parse(timestamp) != null;
+        } catch (Exception ex) {
+            return false;
+        }
     }
 
     public static long timestampToMillis(String timestamp, long defaultValue) {

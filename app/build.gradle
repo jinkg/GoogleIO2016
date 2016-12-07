@@ -15,6 +15,7 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         buildConfigField("boolean", "ENABLE_EXTERNAL_LOG", "true")
         buildConfigField("String", "YOUTUBE_API_KEY", "\"${youtube_api_key}\"")
+        buildConfigField("String", "FEEDBACK_API_ENDPOINT", "\"${feedback_api_endpoint}\"")
 
         buildConfigField("boolean", "ENABLE_EXPLORE_IN_NAVIGATION", "true")
         buildConfigField("boolean", "ENABLE_SIGNIN_IN_NAVIGATION", "true")
@@ -40,17 +41,29 @@ android {
         buildConfigField("String", "PREF_SESSION_FEEDBACK_REMINDERS_ENABLED", "\"pref_session_feedback_reminders_enabled_${conf_version}\"")
     }
     buildTypes {
-        debug{
+        debug {
             debuggable true
             minifyEnabled false
 
-            resValue("string","website_host_name","${production_website_host_name}")
+            buildConfigField("String", "SERVER_MANIFEST_ENDPOINT", "\"${staging_api_manifest_endpoint}\"")
+            resValue("string", "website_host_name", "${production_website_host_name}")
         }
-        release {
-            minifyEnabled false
+        qualityassyrance {
+            debuggable false
+            minifyEnabled true
+
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
 
-            resValue("string","website_host_name","${production_website_host_name}")
+            buildConfigField("String", "SERVER_MANIFEST_ENDPOINT", "\"${production_api_manifest_endpoint}\"")
+            resValue("string", "website_host_name", "${production_website_host_name}")
+        }
+        release {
+            debuggable false
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+            buildConfigField("String", "SERVER_MANIFEST_ENDPOINT", "\"${production_api_manifest_endpoint}\"")
+            resValue("string", "website_host_name", "${production_website_host_name}")
         }
     }
 }
@@ -72,8 +85,10 @@ dependencies {
 
     // Glide library, used to handle asynchronous loading and caching of images.
     compile 'com.github.bumptech.glide:glide:3.5.2'
-    
+
     compile 'com.google.guava:guava:18.0'
+
+    compile files('../third_party/basic-http-client/libs/basic-http-client-android-0.88.jar')
 
     androidTestCompile 'com.android.support.test:runner:0.5'
     androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.2'

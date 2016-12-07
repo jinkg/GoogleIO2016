@@ -3,15 +3,18 @@ package com.yalin.googleio2016.ui;
 import android.accounts.AccountManager;
 import android.content.ContentResolver;
 import android.content.Intent;
+import android.content.SyncStatusObserver;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.google.android.gms.auth.GoogleAuthUtil;
 import com.yalin.googleio2016.R;
 import com.yalin.googleio2016.injection.LoginAndAuthProvider;
 import com.yalin.googleio2016.injection.MessagingRegistrationProvider;
@@ -112,7 +115,24 @@ public abstract class BaseActivity extends AppCompatActivity implements
 
         DataBootstrapService.startDataBootstrapIfNecessary(this);
 
+        mSyncStatusObserver.onStatusChanged(0);
+        final int mask = ContentResolver.SYNC_OBSERVER_TYPE_PENDING |
+                ContentResolver.SYNC_OBSERVER_TYPE_ACTIVE;
+        mSyncObserverHandle = ContentResolver.addStatusChangeListener(mask, mSyncStatusObserver);
+
         startLoginProcess();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (mSyncObserverHandle != null) {
+            ContentResolver.removeStatusChangeListener(mSyncObserverHandle);
+            mSyncObserverHandle = null;
+        }
+        if (mLoginAndAuthProvider != null) {
+            mLoginAndAuthProvider.stop();
+        }
     }
 
     @Override
@@ -315,6 +335,34 @@ public abstract class BaseActivity extends AppCompatActivity implements
                     mAppNavigationViewAsDrawer.showNavigation();
                 }
             });
+        }
+    }
+
+    private SyncStatusObserver mSyncStatusObserver = new SyncStatusObserver() {
+        @Override
+        public void onStatusChanged(int which) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    String accountName = AccountUtils.getActiveAccountName(BaseActivity.this);
+                    if (TextUtils.isEmpty(accountName)) {
+                        onRefreshingStateChanged(false);
+                        return;
+                    }
+
+                    android.accounts.Account account = new android.accounts.Account(
+                            accountName, GoogleAuthUtil.GOOGLE_ACCOUNT_TYPE);
+                    boolean syncActive = ContentResolver.isSyncActive(
+                            account, ScheduleContract.CONTENT_AUTHORITY);
+                    onRefreshingStateChanged(syncActive);
+                }
+            });
+        }
+    };
+
+    protected void onRefreshingStateChanged(boolean refreshing) {
+        if (mSwipeRefreshLayout != null) {
+            mSwipeRefreshLayout.setRefreshing(refreshing);
         }
     }
 

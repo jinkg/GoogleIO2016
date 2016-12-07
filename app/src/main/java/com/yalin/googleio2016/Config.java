@@ -36,6 +36,22 @@ public class Config {
             System.currentTimeMillis() - 1000 :
             CONFERENCE_START_MILLIS - TimeUnit.MILLISECONDS.convert(3L, TimeUnit.DAYS));
 
+    // Auto sync interval. Shouldn't be too small, or it might cause battery drain.
+    public static final long AUTO_SYNC_INTERVAL_LONG_BEFORE_CONFERENCE =
+            TimeUnit.MILLISECONDS.convert(6L, TimeUnit.HOURS);
+
+    public static final long AUTO_SYNC_INTERVAL_AROUND_CONFERENCE =
+            TimeUnit.MILLISECONDS.convert(2L, TimeUnit.HOURS);
+
+    // Disable periodic sync after the conference and rely entirely on GCM push for syncing data.
+    public static final long AUTO_SYNC_INTERVAL_AFTER_CONFERENCE = -1L;
+
+    // How many days before the conference we consider to be "around the conference date"
+    // for purposes of sync interval (at which point the AUTO_SYNC_INTERVAL_AROUND_CONFERENCE
+    // interval kicks in)
+    public static final long AUTO_SYNC_AROUND_CONFERENCE_THRESH =
+            TimeUnit.MILLISECONDS.convert(3L, TimeUnit.DAYS);
+
     // Known session tags that induce special behaviors
     public interface Tags {
 

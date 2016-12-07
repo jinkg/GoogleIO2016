@@ -73,7 +73,7 @@ public class ConferenceDataHandler {
     HashMap<String, JSONHandler> mHandlerForKey = new HashMap<>();
 
     // Tally of total content provider operations we carried out (for statistical purposes)
-    private int mContentProviderOperationDone = 0;
+    private int mContentProviderOperationsDone = 0;
 
     public ConferenceDataHandler(Context ctx) {
         mContext = ctx;
@@ -130,7 +130,7 @@ public class ConferenceDataHandler {
                 mContext.getContentResolver().applyBatch(ScheduleContract.CONTENT_AUTHORITY, batch);
             }
             LogUtil.d(TAG, "Successfully applied " + operations + " content provider operations.");
-            mContentProviderOperationDone += operations;
+            mContentProviderOperationsDone += operations;
         } catch (RemoteException ex) {
             LogUtil.e(TAG, "RemoteException while applying content provider operations.", ex);
             throw new RuntimeException("Error executing content provider batch operation.", ex);
@@ -148,6 +148,10 @@ public class ConferenceDataHandler {
 
         setDataTimestamp(dataTimestamp);
         LogUtil.d(TAG, "Done applying conference data.");
+    }
+
+    public int getContentProviderOperationsDone() {
+        return mContentProviderOperationsDone;
     }
 
     private void processDataBody(String dataBody) throws IOException {
@@ -191,5 +195,11 @@ public class ConferenceDataHandler {
         LogUtil.d(TAG, "Setting data timestamp to: " + timestamp);
         PreferenceManager.getDefaultSharedPreferences(mContext).edit().putString(
                 SP_KEY_DATA_TIMESTAMP, timestamp).commit();
+    }
+
+    // Returns the timestamp of the data we have in the content provider.
+    public String getDataTimestamp() {
+        return PreferenceManager.getDefaultSharedPreferences(mContext).getString(
+                SP_KEY_DATA_TIMESTAMP, DEFAULT_TIMESTAMP);
     }
 }
