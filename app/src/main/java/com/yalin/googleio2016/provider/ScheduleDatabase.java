@@ -260,6 +260,9 @@ public class ScheduleDatabase extends SQLiteOpenHelper {
             db.execSQL("DROP TABLE IF EXISTS " + Tables.MY_SCHEDULE);
             db.execSQL("DROP TABLE IF EXISTS " + Tables.SESSIONS_TAGS);
             db.execSQL("DROP TABLE IF EXISTS " + Tables.SESSIONS_SPEAKERS);
+            db.execSQL("DROP TABLE IF EXISTS " + Tables.FEEDBACK);
+            db.execSQL("DROP TABLE IF EXISTS " + Tables.SESSIONS_SEARCH);
+            db.execSQL("DROP TABLE IF EXISTS " + Tables.SPEAKERS);
 
             onCreate(db);
 
