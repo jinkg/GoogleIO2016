@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.yalin.googleio2016.ui.widget.SearchSnippet xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/search_result"
+    style="@style/Body1Text"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="start|center_vertical"
+    android:minHeight="?android:listPreferredItemHeightSmall"
+    android:paddingBottom="@dimen/spacing_normal"
+    android:paddingEnd="@dimen/padding_normal"
+    android:paddingLeft="@dimen/keyline_2"
+    android:paddingRight="@dimen/padding_normal"
+    android:paddingStart="@dimen/keyline_2"
+    android:paddingTop="@dimen/spacing_normal"
+    android:textAlignment="viewStart" />

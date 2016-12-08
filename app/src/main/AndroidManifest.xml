@@ -159,6 +159,27 @@
             android:exported="false"
             android:theme="@style/Theme.GoogleIO.Transparent" />
 
+        <activity
+            android:name=".ui.SearchActivity"
+            android:exported="false"
+            android:label="@string/title_search"
+            android:launchMode="singleTop"
+            android:theme="@style/Theme.GoogleIO.Search">
+            <!-- This Activity handles the search intent -->
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+                <!-- Intent filter does not need a category = default, since the system delivers
+                     the ACTION_SEARCH intent explicitly to the searcheable activity,
+                     using component name.
+                  -->
+            </intent-filter>
+
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
+
+        </activity>
+
         <provider
             android:name=".provider.ScheduleProvider"
             android:authorities="com.yalin.googleio2016"

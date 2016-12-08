@@ -2,6 +2,7 @@ package com.yalin.googleio2016.sync;
 
 
 import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SyncResult;
@@ -289,9 +290,8 @@ public class SyncHelper {
     public static void performPostSyncChores(final Context context) {
         // Update search index.
         LogUtil.d(TAG, "Updating search index.");
-        // TODO: 2016/12/7 update search index
-//        context.getContentResolver().update(ScheduleContract.SearchIndex.CONTENT_URI,
-//                new ContentValues(), null, null);
+        context.getContentResolver().update(ScheduleContract.SearchIndex.CONTENT_URI,
+                new ContentValues(), null, null);
 
         // Sync calendar.
         LogUtil.d(TAG, "Session data changed. Syncing starred sessions with Calendar.");

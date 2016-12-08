@@ -21,11 +21,18 @@ public enum ScheduleUriEnum {
     SESSIONS(400, "sessions", ScheduleContract.Sessions.CONTENT_TYPE_ID, false,
             ScheduleDatabase.Tables.SESSIONS),
     SESSIONS_MY_SCHEDULE(401, "sessions/my_schedule", ScheduleContract.Sessions.CONTENT_TYPE_ID, false, null),
+    SESSIONS_SEARCH(403, "sessions/search/*", ScheduleContract.Sessions.CONTENT_TYPE_ID, false, null),
     SESSIONS_ID(405, "sessions/*", ScheduleContract.Sessions.CONTENT_TYPE_ID, true, null),
     SESSIONS_ID_SPEAKERS(406, "sessions/*/speakers", ScheduleContract.Speakers.CONTENT_TYPE_ID, false,
             ScheduleDatabase.Tables.SESSIONS_SPEAKERS),
     SESSIONS_ID_TAGS(407, "sessions/*/tags", ScheduleContract.Tags.CONTENT_TYPE_ID, false,
             ScheduleDatabase.Tables.SESSIONS_TAGS),
+
+    SEARCH_INDEX(801, "search_index", null, false, null),
+
+    SEARCH_TOPICS_SESSION(1400, "search_topics_sessions",
+            ScheduleContract.SearchTopicsSessions.CONTENT_TYPE_ID, false, null /*virtual table*/),
+
     CARDS(1500, "cards", ScheduleContract.Cards.CONTENT_TYPE_ID, false, ScheduleDatabase.Tables.CARDS);
 
     public int code;

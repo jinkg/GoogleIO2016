@@ -34,6 +34,9 @@
 
     <string name="title_activity_debug_test_runner" translatable="false">Debug Test Runner</string>
 
+    <!-- Label for Search screen, that allows users to search for sessions. -->
+    <string name="title_search">Search</string>
+
     <string name="talkback_selected">%1$s selected</string>
     <string name="talkback_not_selected">%1$s not selected</string>
 
@@ -42,6 +45,17 @@
 
     <!-- Button to view more Videos or sessions from the videos/sessions card view. -->
     <string name="more_items_button">More</string>
+
+    <!-- Menu item that allows the user to start a search for a session by name. After clicking,
+    they type in their search query. -->
+    <string name="description_search">Search</string>
+
+    <!-- Hint that the user can search across sessions -->
+    <string name="search_hint">Search sessions</string>
+
+    <!-- Search label that shows the type of data being searched for when the user clicks the
+    Search button. -->
+    <string name="search_label">Google I/O sessions</string>
 
     <!-- Label on a button that allows the user to see what conference sessions are available
     at a particular time. -->

@@ -99,5 +99,9 @@
 
     <color name="hash_io_monochrome">#15000000</color> <!-- 8% black -->
 
+    <color name="card">#fff</color>
+    <!-- search -->
+    <color name="dialog_background">#7f000000</color>
+
     <color name="welcome_nav_bar">#ff296e78</color>
 </resources>

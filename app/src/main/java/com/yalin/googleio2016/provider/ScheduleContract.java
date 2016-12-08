@@ -6,6 +6,8 @@ import android.text.format.DateUtils;
 
 import com.yalin.googleio2016.util.ParserUtils;
 
+import java.util.List;
+
 /**
  * YaLin
  * 2016/11/29.
@@ -562,6 +564,36 @@ public final class ScheduleContract {
             return CONTENT_URI.buildUpon().appendPath(PATH_UNSCHEDULED).appendPath(interval)
                     .build();
         }
+
+        /**
+         * Build {@link Uri} that references sessions that match the query. The query can be
+         * multiple words separated with spaces.
+         *
+         * @param query The query. Can be multiple words separated by spaces.
+         * @return {@link Uri} to the sessions
+         */
+        public static Uri buildSearchUri(String query) {
+            if (null == query) {
+                query = "";
+            }
+            // convert "lorem ipsum dolor sit" to "lorem* ipsum* dolor* sit*"
+            query = query.replaceAll(" +", " *") + "*";
+            return CONTENT_URI.buildUpon()
+                    .appendPath(PATH_SEARCH).appendPath(query).build();
+        }
+
+        public static String getSearchQuery(Uri uri) {
+            List<String> segments = uri.getPathSegments();
+            if (2 < segments.size()) {
+                return segments.get(2);
+            }
+            return null;
+        }
+
+        public static boolean isSearchUri(Uri uri) {
+            List<String> pathSegments = uri.getPathSegments();
+            return pathSegments.size() >= 2 && PATH_SEARCH.equals(pathSegments.get(1));
+        }
     }
 
     /**
@@ -725,5 +757,59 @@ public final class ScheduleContract {
         public static Uri buildCardUri(String cardId) {
             return CONTENT_URI.buildUpon().appendPath(PATH_CARDS).appendPath(cardId).build();
         }
+    }
+
+    public static class SearchIndex {
+        public static final Uri CONTENT_URI =
+                BASE_CONTENT_URI.buildUpon().appendPath(PATH_SEARCH_INDEX).build();
+    }
+
+    public static class SearchTopicsSessions {
+        public static final String PATH_SEARCH_TOPICS_SESSIONS = "search_topics_sessions";
+
+        public static final String CONTENT_TYPE_ID = "search_topics_sessions";
+
+        public static final Uri CONTENT_URI =
+                BASE_CONTENT_URI.buildUpon().appendPath(PATH_SEARCH_TOPICS_SESSIONS).build();
+
+        public static final String TOPIC_TAG_SELECTION = Tags.TAG_CATEGORY + "= ? and " +
+                Tags.TAG_NAME + " like ?";
+
+        public static final String TOPIC_TAG_SORT = Tags.TAG_NAME + " ASC";
+
+        public static final String[] TOPIC_TAG_PROJECTION = {
+                BaseColumns._ID,
+                Tags.TAG_ID,
+                Tags.TAG_NAME,
+        };
+
+        public static final String[] SEARCH_SESSIONS_PROJECTION = {
+                BaseColumns._ID,
+                ScheduleContract.Sessions.SESSION_ID,
+                ScheduleContract.Sessions.SEARCH_SNIPPET
+        };
+
+        public static final String[] DEFAULT_PROJECTION = new String[]{
+                BaseColumns._ID,
+                SearchTopicSessionsColumns.TAG_OR_SESSION_ID,
+                SearchTopicSessionsColumns.SEARCH_SNIPPET,
+                SearchTopicSessionsColumns.IS_TOPIC_TAG,
+        };
+    }
+
+    /**
+     * Columns for an in memory table created on query using
+     * the Tags table and the SearchSessions table.
+     */
+    public interface SearchTopicSessionsColumns extends BaseColumns {
+        /* This column contains either a tag_id or a session_id */
+        String TAG_OR_SESSION_ID = "tag_or_session_id";
+        /* This column contains the search snippet to be shown to the user.*/
+        String SEARCH_SNIPPET = "search_snippet";
+        /* Indicates whether this row is a topic tag or a session_id. */
+        String IS_TOPIC_TAG = "is_topic_tag";
+    }
+
+    private ScheduleContract() {
     }
 }

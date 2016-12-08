@@ -14,6 +14,7 @@ import com.yalin.googleio2016.provider.ScheduleContract.RoomsColumns;
 import com.yalin.googleio2016.provider.ScheduleContract.Sessions;
 import com.yalin.googleio2016.provider.ScheduleContract.SessionsColumns;
 import com.yalin.googleio2016.provider.ScheduleContract.Speakers;
+import com.yalin.googleio2016.provider.ScheduleContract.SpeakersColumns;
 import com.yalin.googleio2016.provider.ScheduleContract.SyncColumns;
 import com.yalin.googleio2016.provider.ScheduleContract.Tags;
 import com.yalin.googleio2016.provider.ScheduleContract.TagsColumns;
@@ -37,7 +38,8 @@ public class ScheduleDatabase extends SQLiteOpenHelper {
     private static final int VER_2016_11_30B = 2;
     private static final int VER_2016_11_30C = 3;
     private static final int VER_2016_12_07 = 4;
-    private static final int CUR_DATABASE_VERSION = VER_2016_12_07;
+    private static final int VER_2016_12_08 = 5;
+    private static final int CUR_DATABASE_VERSION = VER_2016_12_08;
 
     interface Tables {
         String BLOCKS = "blocks";
@@ -77,6 +79,12 @@ public class ScheduleDatabase extends SQLiteOpenHelper {
 
         String SESSIONS_TAGS_JOIN_TAGS = "sessions_tags "
                 + "LEFT OUTER JOIN tags ON sessions_tags.tag_id=tags.tag_id";
+
+        String SESSIONS_SEARCH_JOIN_SESSIONS_ROOMS = "sessions_search "
+                + "LEFT OUTER JOIN sessions ON sessions_search.session_id=sessions.session_id "
+                + "LEFT OUTER JOIN myschedule ON sessions.session_id=myschedule.session_id "
+                + "AND myschedule.account_name=? "
+                + "LEFT OUTER JOIN rooms ON sessions.room_id=rooms.room_id";
     }
 
     public interface SessionsSpeakers {
@@ -89,6 +97,11 @@ public class ScheduleDatabase extends SQLiteOpenHelper {
         String TAG_ID = "tag_id";
     }
 
+    interface SessionsSearchColumns {
+        String SESSION_ID = "session_id";
+        String BODY = "body";
+    }
+
     /**
      * {@code REFERENCES} clauses.
      */
@@ -98,6 +111,27 @@ public class ScheduleDatabase extends SQLiteOpenHelper {
         String SESSION_ID = "REFERENCES " + Tables.SESSIONS + "(" + Sessions.SESSION_ID + ")";
         String ROOM_ID = "REFERENCES " + Tables.ROOMS + "(" + Rooms.ROOM_ID + ")";
         String SPEAKER_ID = "REFERENCES " + Tables.SPEAKERS + "(" + Speakers.SPEAKER_ID + ")";
+    }
+
+    /**
+     * Fully-qualified field names.
+     */
+    private interface Qualified {
+        String SESSIONS_SEARCH = Tables.SESSIONS_SEARCH + "(" + SessionsSearchColumns.SESSION_ID
+                + "," + SessionsSearchColumns.BODY + ")";
+
+        String SESSIONS_TAGS_SESSION_ID = Tables.SESSIONS_TAGS + "."
+                + SessionsTags.SESSION_ID;
+
+        String SESSIONS_SPEAKERS_SESSION_ID = Tables.SESSIONS_SPEAKERS + "."
+                + SessionsSpeakers.SESSION_ID;
+
+        String SESSIONS_SPEAKERS_SPEAKER_ID = Tables.SESSIONS_SPEAKERS + "."
+                + SessionsSpeakers.SPEAKER_ID;
+
+        String SPEAKERS_SPEAKER_ID = Tables.SPEAKERS + "." + Speakers.SPEAKER_ID;
+
+        String FEEDBACK_SESSION_ID = Tables.FEEDBACK + "." + FeedbackColumns.SESSION_ID;
     }
 
     public ScheduleDatabase(Context context) {
@@ -180,6 +214,7 @@ public class ScheduleDatabase extends SQLiteOpenHelper {
         upgradeFrom30to30B(db);
         upgradeFrom30Bto30C(db);
         upgradeFrom30Cto07(db);
+        upgradeFrom07to08(db);
     }
 
     @Override
@@ -206,6 +241,12 @@ public class ScheduleDatabase extends SQLiteOpenHelper {
             LogUtil.d(TAG, "Upgrading database from 30C to 07.");
             upgradeFrom30Cto07(db);
             version = VER_2016_12_07;
+        }
+
+        if (version == VER_2016_12_07) {
+            LogUtil.d(TAG, "Upgrading database from 07 to 08.");
+            upgradeFrom07to08(db);
+            version = VER_2016_12_08;
         }
 
         if (version != CUR_DATABASE_VERSION) {
@@ -271,6 +312,63 @@ public class ScheduleDatabase extends SQLiteOpenHelper {
                 + FeedbackColumns.ANSWER_SPEAKER + " INTEGER NOT NULL,"
                 + FeedbackColumns.COMMENTS + " TEXT,"
                 + FeedbackColumns.SYNCED + " INTEGER NOT NULL DEFAULT 0)");
+    }
+
+    private void upgradeFrom07to08(SQLiteDatabase db) {
+        // Full-text search index. Update using updateSessionSearchIndex method.
+        // Use the porter tokenizer for simple stemming, so that "frustration" matches "frustrated."
+        db.execSQL("CREATE VIRTUAL TABLE " + Tables.SESSIONS_SEARCH + " USING fts3("
+                + BaseColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + SessionsSearchColumns.BODY + " TEXT NOT NULL,"
+                + SessionsSearchColumns.SESSION_ID
+                + " TEXT NOT NULL " + References.SESSION_ID + ","
+                + "UNIQUE (" + SessionsSearchColumns.SESSION_ID + ") ON CONFLICT REPLACE,"
+                + "tokenize=porter)");
+
+        db.execSQL("CREATE TABLE " + Tables.SPEAKERS + " ("
+                + BaseColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + SyncColumns.UPDATED + " INTEGER NOT NULL,"
+                + SpeakersColumns.SPEAKER_ID + " TEXT NOT NULL,"
+                + SpeakersColumns.SPEAKER_NAME + " TEXT,"
+                + SpeakersColumns.SPEAKER_IMAGE_URL + " TEXT,"
+                + SpeakersColumns.SPEAKER_COMPANY + " TEXT,"
+                + SpeakersColumns.SPEAKER_ABSTRACT + " TEXT,"
+                + SpeakersColumns.SPEAKER_URL + " TEXT,"
+                + SpeakersColumns.SPEAKER_IMPORT_HASHCODE + " TEXT NOT NULL DEFAULT '',"
+                + "UNIQUE (" + SpeakersColumns.SPEAKER_ID + ") ON CONFLICT REPLACE)");
+    }
+
+    /**
+     * Updates the session search index. This should be done sparingly, as the queries are rather
+     * complex.
+     */
+    static void updateSessionSearchIndex(SQLiteDatabase db) {
+        db.execSQL("DELETE FROM " + Tables.SESSIONS_SEARCH);
+
+        db.execSQL("INSERT INTO " + Qualified.SESSIONS_SEARCH
+                + " SELECT s." + Sessions.SESSION_ID + ",("
+
+                // Full text body
+                + Sessions.SESSION_TITLE + "||'; '||"
+                + Sessions.SESSION_ABSTRACT + "||'; '||"
+                + "IFNULL(GROUP_CONCAT(t." + Speakers.SPEAKER_NAME + ",' '),'')||'; '||"
+                + "'')"
+
+                + " FROM " + Tables.SESSIONS + " s "
+                + " LEFT OUTER JOIN"
+
+                // Subquery resulting in session_id, speaker_id, speaker_name
+                + "(SELECT " + Sessions.SESSION_ID + "," + Qualified.SPEAKERS_SPEAKER_ID
+                + "," + Speakers.SPEAKER_NAME
+                + " FROM " + Tables.SESSIONS_SPEAKERS
+                + " INNER JOIN " + Tables.SPEAKERS
+                + " ON " + Qualified.SESSIONS_SPEAKERS_SPEAKER_ID + "="
+                + Qualified.SPEAKERS_SPEAKER_ID
+                + ") t"
+
+                // Grand finale
+                + " ON s." + Sessions.SESSION_ID + "=t." + Sessions.SESSION_ID
+                + " GROUP BY s." + Sessions.SESSION_ID);
     }
 
     public static void deleteDatabase(Context context) {

@@ -7,6 +7,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.OperationApplicationException;
 import android.database.Cursor;
+import android.database.MatrixCursor;
 import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
@@ -17,6 +18,7 @@ import android.text.TextUtils;
 import com.yalin.googleio2016.Config;
 import com.yalin.googleio2016.provider.ScheduleContract.Blocks;
 import com.yalin.googleio2016.provider.ScheduleContract.Feedback;
+import com.yalin.googleio2016.provider.ScheduleContract.SearchTopicsSessions;
 import com.yalin.googleio2016.provider.ScheduleContract.Sessions;
 import com.yalin.googleio2016.provider.ScheduleContract.Speakers;
 import com.yalin.googleio2016.provider.ScheduleContract.Tags;
@@ -119,7 +121,7 @@ public class ScheduleProvider extends ContentProvider {
 
     /**
      * Adds the {@code tagsFilter} query parameter to the given {@code builder}. This query
-     * parameter is used by the {@link com.google.samples.apps.iosched.explore.ExploreSessionsActivity}
+     * parameter is used by the {@link com.yalin.googleio2016.explore.ExploreSessionsActivity}
      * when the user makes a selection containing multiple filters.
      */
     private void addTagsFilter(SelectionBuilder builder, String tagsFilter, String numCategories) {
@@ -190,7 +192,72 @@ public class ScheduleProvider extends ContentProvider {
                 }
                 return cursor;
             }
+            case SEARCH_TOPICS_SESSION: {
+                if (selectionArgs == null || selectionArgs.length == 0) {
+                    return createMergedSearchCursor(null, null);
+                }
+                String selectionArg = selectionArgs[0] == null ? "" : selectionArgs[0];
+                // First we query the Tags table to find any tags that match the given query
+                Cursor tags = query(Tags.CONTENT_URI, SearchTopicsSessions.TOPIC_TAG_PROJECTION,
+                        SearchTopicsSessions.TOPIC_TAG_SELECTION,
+                        new String[]{Config.Tags.CATEGORY_TRACK, selectionArg + "%"},
+                        SearchTopicsSessions.TOPIC_TAG_SORT);
+                // Then we query the sessions_search table and get a list of sessions that match
+                // the given keywords.
+                Cursor search = null;
+                if (selectionArgs[0] != null) { // dont query if there was no selectionArg.
+                    search = query(ScheduleContract.Sessions.buildSearchUri(selectionArg),
+                            SearchTopicsSessions.SEARCH_SESSIONS_PROJECTION,
+                            null, null,
+                            Sessions.SORT_BY_TYPE_THEN_TIME);
+                }
+                // Now that we have two cursors, we merge the cursors and return a unified view
+                // of the two result sets.
+                return createMergedSearchCursor(tags, search);
+            }
         }
+    }
+
+    /**
+     * Create a {@link MatrixCursor} given the tags and search cursors.
+     *
+     * @param tags   Cursor with the projection {@link SearchTopicsSessions#TOPIC_TAG_PROJECTION}.
+     * @param search Cursor with the projection
+     *               {@link SearchTopicsSessions#SEARCH_SESSIONS_PROJECTION}.
+     * @return Returns a MatrixCursor always with {@link SearchTopicsSessions#DEFAULT_PROJECTION}
+     */
+    private Cursor createMergedSearchCursor(Cursor tags, Cursor search) {
+        // How big should our MatrixCursor be?
+        int maxCount = (tags == null ? 0 : tags.getCount()) +
+                (search == null ? 0 : search.getCount());
+
+        MatrixCursor matrixCursor = new MatrixCursor(
+                SearchTopicsSessions.DEFAULT_PROJECTION, maxCount);
+
+        // Iterate over the tags cursor and add rows.
+        if (tags != null && tags.moveToFirst()) {
+            do {
+                matrixCursor.addRow(
+                        new Object[]{
+                                tags.getLong(0),
+                                tags.getLong(1), /*tag_id*/
+                                "{" + tags.getString(2) + "}", /*search_snippet*/
+                                1}); /*is_topic_tag*/
+            } while (tags.moveToNext());
+        }
+        // Iterate over the search cursor and add rows.
+        if (search != null && search.moveToFirst()) {
+            do {
+                matrixCursor.addRow(
+                        new Object[]{
+                                search.getLong(0),
+                                search.getString(1),
+                                search.getString(2),  /*search_snippet*/
+                                0}); /*is_topic_tag*/
+            } while (search.moveToNext());
+        }
+
+        return matrixCursor;
     }
 
     @Nullable
@@ -258,6 +325,19 @@ public class ScheduleProvider extends ContentProvider {
 
     @Override
     public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
+        String accountName = getCurrentAccountName(uri, false);
+        LogUtil.d(TAG, "update(uri=" + uri + ", values=" + values.toString()
+                + ", account=" + accountName + ")");
+
+        final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
+        ScheduleUriEnum matchingUriEnum = mUriMatcher.matchUri(uri);
+        if (matchingUriEnum == ScheduleUriEnum.SEARCH_INDEX) {
+            // update the search index
+            ScheduleDatabase.updateSessionSearchIndex(db);
+            return 1;
+        }
+
+        // TODO: 2016/12/8  add other update
         return 0;
     }
 
@@ -348,6 +428,17 @@ public class ScheduleProvider extends ContentProvider {
                                 Sessions.SESSION_TAGS +
                                 " LIKE '%" + Config.Tags.SPECIAL_KEYNOTE + "%' )")
                         .groupBy(Qualified.SESSIONS_SESSION_ID);
+            }
+            case SESSIONS_SEARCH: {
+                final String query = Sessions.getSearchQuery(uri);
+                return builder.table(Tables.SESSIONS_SEARCH_JOIN_SESSIONS_ROOMS,
+                        getCurrentAccountName(uri, true))
+                        .map(Sessions.SEARCH_SNIPPET, Subquery.SESSIONS_SNIPPET)
+                        .mapToTable(Sessions._ID, Tables.SESSIONS)
+                        .mapToTable(Sessions.SESSION_ID, Tables.SESSIONS)
+                        .mapToTable(Sessions.ROOM_ID, Tables.SESSIONS)
+                        .map(Sessions.SESSION_IN_MY_SCHEDULE, "IFNULL(in_schedule, 0)")
+                        .where(ScheduleDatabase.SessionsSearchColumns.BODY + " MATCH ?", query);
             }
             case SESSIONS_ID: {
                 final String sessionId = Sessions.getSessionId(uri);

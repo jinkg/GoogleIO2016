@@ -11,6 +11,7 @@ import com.yalin.googleio2016.io.JSONHandler;
 import com.yalin.googleio2016.provider.ScheduleContract;
 import com.yalin.googleio2016.settings.SettingsUtils;
 import com.yalin.googleio2016.sync.ConferenceDataHandler;
+import com.yalin.googleio2016.sync.SyncHelper;
 import com.yalin.googleio2016.util.LogUtil;
 
 import java.io.IOException;
@@ -49,7 +50,10 @@ public class DataBootstrapService extends IntentService {
             dataHandler.applyConferenceData(new String[]{bootstrapJson},
                     BuildConfig.BOOTSTRAP_DATA_TIMESTAMP, false);
 
+            SyncHelper.performPostSyncChores(appContext);
+
             LogUtil.d(TAG, "End of bootstrap -- successful. Marking bootstrap as done.");
+            SettingsUtils.markSyncSucceededNow(appContext);
             SettingsUtils.markDataBootstrapDone(appContext);
 
             getContentResolver().notifyChange(Uri.parse(ScheduleContract.CONTENT_AUTHORITY),
